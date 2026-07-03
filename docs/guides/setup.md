@@ -190,4 +190,8 @@ npx tsc --noEmit
 
 ## 下一步
 
-环境搭建完成后，请阅读 [开发流程指南](development.md) 了解日常开发工作流，以及 [编码规范](../standards/coding-conventions.md) 了解代码风格要求。
+环境搭建完成后，推荐继续阅读：
+
+- [开发流程指南](development.md) — 日常开发工作流
+- [编码规范](../standards/coding-conventions.md) — 代码风格要求
+- [部署指南](deployment.md) — 火山引擎 ECS 部署上线

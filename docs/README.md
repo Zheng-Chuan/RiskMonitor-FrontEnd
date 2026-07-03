@@ -13,13 +13,15 @@ docs/
 │   └── data-model.md                  # 数据模型定义
 ├── guides/                            # 开发指南
 │   ├── setup.md                       # 环境搭建指南
-│   └── development.md                 # 开发流程指南
+│   ├── development.md                 # 开发流程指南
+│   └── deployment.md                  # 部署指南
 ├── standards/                         # 开发规范
 │   ├── coding-conventions.md          # 编码规范
 │   └── testing.md                     # 测试规范
 └── decisions/                         # 架构决策记录（ADR）
     ├── 0001-tech-stack-selection.md   # 技术栈选型决策
-    └── 0002-multiagent-frontend-architecture.md  # MultiAgent 前端架构决策
+    ├── 0002-multiagent-frontend-architecture.md  # MultiAgent 前端架构决策
+    └── 0003-volcengine-deployment.md  # ADR: 火山引擎部署决策
 ```
 
 ## 文档索引
@@ -38,6 +40,7 @@ docs/
 |------|------|------|
 | 环境搭建 | [guides/setup.md](guides/setup.md) | 前置要求、安装步骤、开发命令、编辑器配置、常见问题 |
 | 开发流程 | [guides/development.md](guides/development.md) | 开发工作流、代码组织、调试技巧、组件模板、状态管理实践 |
+| 部署指南 | [guides/deployment.md](guides/deployment.md) | 架构总览、火山引擎 ECS 部署、nginx 配置、成本估算、升级路径 |
 
 ### 开发规范
 
@@ -52,6 +55,7 @@ docs/
 |------|------|------|
 | 技术栈选型 | [decisions/0001-tech-stack-selection.md](decisions/0001-tech-stack-selection.md) | React 19 + Vite 8 + TS 6 + Zustand + React Flow + SSE 的选型理由 |
 | MultiAgent 架构 | [decisions/0002-multiagent-frontend-architecture.md](decisions/0002-multiagent-frontend-architecture.md) | Zustand + React Flow + SSE + XState 的架构决策理由 |
+| 火山引擎部署 | [decisions/0003-volcengine-deployment.md](decisions/0003-volcengine-deployment.md) | 火山引擎 ECS + nginx + 轮询的部署决策理由 |
 
 ### 根目录文档
 

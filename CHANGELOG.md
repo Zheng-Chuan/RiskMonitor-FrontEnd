@@ -25,6 +25,8 @@
 - 规划 XState 专家工作流状态机建模
 - 规划 SSE 通信层封装
 - 规划 React Router 路由系统
+- 新增部署指南（[docs/guides/deployment.md](docs/guides/deployment.md)）— 火山引擎 ECS 部署
+- 新增 ADR-0003 火山引擎部署决策（[docs/decisions/0003-volcengine-deployment.md](docs/decisions/0003-volcengine-deployment.md)）
 
 ## [0.1.0] - 2026-07-03
 
