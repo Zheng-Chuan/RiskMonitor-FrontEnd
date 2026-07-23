@@ -1,12 +1,16 @@
 import { BrowserRouter, Routes, Route } from 'react-router'
 
+import { HomePage } from '@/pages/home-page'
+import { SettingsPage } from '@/pages/settings-page'
+import { WorkspacePage } from '@/pages/workspace-page'
+
 export function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<div>首页</div>} />
-        <Route path="/workspace" element={<div>工作区</div>} />
-        <Route path="/settings" element={<div>设置</div>} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/workspace" element={<WorkspacePage />} />
+        <Route path="/settings" element={<SettingsPage />} />
       </Routes>
     </BrowserRouter>
   )

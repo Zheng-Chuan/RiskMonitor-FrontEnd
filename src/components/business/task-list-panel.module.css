@@ -1,0 +1,94 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.kpiGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-md);
+}
+
+.kpiCard {
+  display: grid;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+  border: 1px solid rgba(129, 140, 248, 0.15);
+  border-radius: var(--radius-lg);
+  background: rgba(15, 23, 42, 0.42);
+}
+
+.kpiLabel,
+.kpiHint,
+.taskMeta,
+.count {
+  color: var(--color-text-muted);
+}
+
+.kpiLabel {
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.kpiValue {
+  font-size: 1.8rem;
+  color: #f8fafc;
+}
+
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.taskCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: var(--radius-lg);
+  background: rgba(15, 23, 42, 0.38);
+}
+
+.taskHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.taskTitle {
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.tag {
+  padding: 6px 10px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 999px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  background: rgba(15, 23, 42, 0.34);
+}
+
+.progressGroup {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.progressMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}

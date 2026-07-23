@@ -1,0 +1,158 @@
+.primaryAction,
+.secondaryAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.primaryAction {
+  border-color: rgba(129, 140, 248, 0.35);
+  background: rgba(99, 102, 241, 0.2);
+  color: #eef2ff;
+}
+
+.secondaryAction {
+  border-color: rgba(148, 163, 184, 0.22);
+  color: var(--color-text-secondary);
+}
+
+.heroGrid,
+.featureGrid {
+  display: grid;
+  gap: var(--spacing-lg);
+}
+
+.heroGrid {
+  grid-template-columns: 2fr 1fr;
+}
+
+.featureGrid {
+  margin-top: var(--spacing-xl);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.heroCard {
+  min-height: 360px;
+}
+
+.heroContent {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: var(--spacing-lg);
+}
+
+.heroCopy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.heroBadge {
+  display: inline-flex;
+  width: fit-content;
+  padding: 6px 12px;
+  border: 1px solid rgba(129, 140, 248, 0.3);
+  border-radius: 999px;
+  color: #c7d2fe;
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.heroTitle {
+  max-width: 640px;
+  line-height: 1.25;
+}
+
+.heroText,
+.featureDescription,
+.taskPreviewMeta {
+  color: var(--color-text-secondary);
+}
+
+.heroPreview {
+  padding: var(--spacing-md);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: var(--radius-xl);
+  background: rgba(15, 23, 42, 0.4);
+}
+
+.previewHeader,
+.previewBody {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.previewHeader {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  text-align: center;
+}
+
+.previewBody {
+  margin-top: var(--spacing-sm);
+  grid-template-columns: 0.8fr 1fr 0.8fr;
+  min-height: 220px;
+}
+
+.previewSidebar,
+.previewCanvas {
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: var(--radius-lg);
+}
+
+.previewSidebar {
+  background: rgba(30, 41, 59, 0.45);
+}
+
+.previewCanvas {
+  display: grid;
+  place-content: center;
+  gap: var(--spacing-sm);
+  background: rgba(15, 23, 42, 0.56);
+}
+
+.previewNode {
+  padding: 8px 12px;
+  border: 1px solid rgba(129, 140, 248, 0.24);
+  border-radius: 12px;
+  color: #e2e8f0;
+  font-size: var(--font-size-sm);
+  text-align: center;
+  background: rgba(51, 65, 85, 0.7);
+}
+
+.taskPreviewList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.taskPreviewCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: var(--radius-lg);
+  background: rgba(15, 23, 42, 0.38);
+}
+
+.taskPreviewProgress {
+  color: #a5b4fc;
+  font-weight: 700;
+}
+
+@media (max-width: 1180px) {
+  .heroGrid,
+  .featureGrid,
+  .heroContent {
+    grid-template-columns: 1fr;
+  }
+}

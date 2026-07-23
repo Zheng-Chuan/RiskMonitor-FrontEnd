@@ -1,0 +1,76 @@
+.caption,
+.time,
+.description {
+  color: var(--color-text-muted);
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.tab {
+  padding: 8px 12px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 999px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  background: rgba(15, 23, 42, 0.32);
+}
+
+.tabActive {
+  border-color: rgba(129, 140, 248, 0.32);
+  color: #eef2ff;
+  background: rgba(99, 102, 241, 0.18);
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.eventRow {
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  gap: var(--spacing-md);
+}
+
+.dot {
+  width: 14px;
+  height: 14px;
+  margin-top: 6px;
+  border-radius: 999px;
+  box-shadow: 0 0 24px currentColor;
+}
+
+.info {
+  color: #60a5fa;
+  background: currentColor;
+}
+
+.success {
+  color: #34d399;
+  background: currentColor;
+}
+
+.warning {
+  color: #fbbf24;
+  background: currentColor;
+}
+
+.eventContent {
+  display: grid;
+  gap: var(--spacing-xs);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.eventHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  color: #f8fafc;
+}

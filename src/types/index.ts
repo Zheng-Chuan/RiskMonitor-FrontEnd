@@ -19,3 +19,17 @@ export type {
   ArtifactMessage,
   ErrorMessage,
 } from './message'
+export type {
+  AgentArtifactSummary,
+  AgentPanelSummary,
+  CanvasAgentNodeData,
+  HomeFeature,
+  SettingItem,
+  SettingSection,
+  WorkspaceAgentDetail,
+  WorkspaceEdge,
+  WorkspaceEvent,
+  WorkspaceKpi,
+  WorkspaceNode,
+  WorkspaceTaskSummary,
+} from './workspace'

@@ -1,0 +1,53 @@
+.actionLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 999px;
+  color: var(--color-text-secondary);
+}
+
+.settingsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.sectionDescription,
+.itemHint {
+  color: var(--color-text-secondary);
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.itemCard {
+  display: grid;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: var(--radius-lg);
+  background: rgba(15, 23, 42, 0.38);
+}
+
+.itemHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.itemValue {
+  color: #c7d2fe;
+  font-size: var(--font-size-sm);
+}
+
+@media (max-width: 960px) {
+  .settingsGrid {
+    grid-template-columns: 1fr;
+  }
+}

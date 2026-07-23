@@ -13,6 +13,9 @@ body {
   line-height: 1.5;
   color: var(--color-text);
   background-color: var(--color-bg);
+  background-image:
+    radial-gradient(circle at top left, rgba(99, 102, 241, 0.12), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(34, 211, 238, 0.08), transparent 24%);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -52,10 +55,14 @@ p {
 a {
   color: var(--color-primary);
   text-decoration: none;
+  transition:
+    color var(--transition-fast),
+    opacity var(--transition-fast);
 }
 
 a:hover {
-  text-decoration: underline;
+  opacity: 0.92;
+  text-decoration: none;
 }
 
 button {
