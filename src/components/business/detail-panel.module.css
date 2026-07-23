@@ -1,0 +1,64 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.section {
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+.sectionLabel,
+.artifactType {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.primaryText {
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.secondaryText {
+  color: var(--color-text-secondary);
+}
+
+.metricList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.metricChip {
+  padding: 8px 12px;
+  border: 1px solid rgba(129, 140, 248, 0.18);
+  border-radius: 999px;
+  color: #dbeafe;
+  font-size: var(--font-size-sm);
+  background: rgba(30, 41, 59, 0.75);
+}
+
+.artifactList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.artifactCard {
+  display: grid;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: var(--radius-lg);
+  background: rgba(15, 23, 42, 0.42);
+}
+
+.artifactHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}

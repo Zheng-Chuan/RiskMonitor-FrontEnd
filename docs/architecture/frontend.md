@@ -255,7 +255,7 @@ export class HTTPClient {
 采用 React Router v7 进行客户端路由管理：
 
 ```typescript
-// 路由结构规划
+// 首版页面骨架
 const routes = [
   {
     path: '/',
@@ -264,11 +264,6 @@ const routes = [
   {
     path: '/workspace',
     element: <WorkspacePage />,
-    children: [
-      { path: 'chat', element: <ChatPanel /> },
-      { path: 'canvas', element: <ExpertCanvas /> },
-      { path: 'tasks', element: <TaskList /> },
-    ],
   },
   {
     path: '/settings',
@@ -281,11 +276,32 @@ const routes = [
 
 | 路径 | 页面 | 说明 |
 |------|------|------|
-| `/` | 首页 | 项目入口、快速操作 |
-| `/workspace` | 工作区 | 专家团协作主界面 |
-| `/workspace/chat` | 对话面板 | 流式对话交互 |
-| `/workspace/canvas` | 专家画布 | 智能体可视化画布 |
-| `/workspace/tasks` | 任务列表 | 任务状态追踪 |
-| `/settings` | 设置页 | 应用配置 |
+| `/` | 首页 | 项目入口、任务概览、能力展示 |
+| `/workspace` | 工作区 | Figma 风格三栏布局，包含任务列表、协作画布、详情面板和底部事件流 |
+| `/settings` | 设置页 | SSE、角色与主题等运行配置骨架 |
+
+### 首版页面骨架
+
+当前代码骨架已落地以下页面与核心组件：
+
+```text
+pages/
+├── home-page.tsx              # 首页
+├── workspace-page.tsx         # 工作台
+└── settings-page.tsx          # 设置页
+
+components/
+├── layout/
+│   └── app-shell.tsx          # 全局头部与导航壳层
+├── base/
+│   ├── surface-card.tsx       # 通用卡片
+│   ├── status-badge.tsx       # 状态徽标
+│   └── progress-bar.tsx       # 进度条
+└── business/
+    ├── task-list-panel.tsx    # 左侧任务与 KPI 面板
+    ├── workspace-canvas.tsx   # 中间多智能体画布
+    ├── detail-panel.tsx       # 右侧角色详情
+    └── event-timeline.tsx     # 底部事件流
+```
 
 数据模型定义详见 [数据模型](data-model.md)，架构总体设计详见 [架构概览](overview.md)。

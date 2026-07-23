@@ -1,0 +1,43 @@
+.actionLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border: 1px solid rgba(129, 140, 248, 0.28);
+  border-radius: 999px;
+  color: #eef2ff;
+  background: rgba(99, 102, 241, 0.18);
+  font-weight: 600;
+}
+
+.workspaceGrid {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr) 340px;
+  gap: var(--spacing-lg);
+}
+
+.leftRail,
+.centerRail,
+.rightRail {
+  min-width: 0;
+}
+
+.bottomPanel {
+  margin-top: var(--spacing-lg);
+}
+
+@media (max-width: 1280px) {
+  .workspaceGrid {
+    grid-template-columns: 280px minmax(0, 1fr);
+  }
+
+  .rightRail {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 960px) {
+  .workspaceGrid {
+    grid-template-columns: 1fr;
+  }
+}

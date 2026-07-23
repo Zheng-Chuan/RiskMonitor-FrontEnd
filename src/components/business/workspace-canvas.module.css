@@ -1,0 +1,74 @@
+.canvasCard {
+  min-height: 100%;
+}
+
+.canvasHint {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.canvasFrame {
+  height: 560px;
+  overflow: hidden;
+  border: 1px solid rgba(129, 140, 248, 0.14);
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(circle at top left, rgba(99, 102, 241, 0.18), transparent 28%),
+    rgba(15, 23, 42, 0.58);
+}
+
+.nodeCard {
+  width: 220px;
+  padding: 16px;
+  border: 1px solid rgba(129, 140, 248, 0.24);
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.82)),
+    rgba(15, 23, 42, 0.9);
+  box-shadow:
+    0 10px 30px rgba(2, 6, 23, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.nodeHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.nodeRole {
+  display: block;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nodeTitle {
+  display: block;
+  margin-top: 6px;
+  color: #f8fafc;
+  font-size: var(--font-size-base);
+}
+
+.nodeSubtitle {
+  margin-top: 12px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.miniMap {
+  background: rgba(15, 23, 42, 0.92);
+}
+
+.controls {
+  background: rgba(15, 23, 42, 0.92);
+  border-radius: 14px;
+}
+
+@media (max-width: 768px) {
+  .canvasFrame {
+    height: 420px;
+  }
+}
