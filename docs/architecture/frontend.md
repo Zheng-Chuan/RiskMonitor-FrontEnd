@@ -175,6 +175,12 @@ graph TB
 
 ## 通信层设计
 
+### MVP 协议约束
+
+当前最小 demo 阶段以前后端 REST BFF 为主, 使用 `POST /api/tasks` `GET /api/tasks/{task_id}` `GET /api/agents` 完成提交, 轮询和状态展示. SSE 仍然保留为后续升级方向, 但不属于第一阶段验收范围.
+
+接口字段和状态映射的权威定义见 [REST BFF 接口契约](rest-bff-contract.md).
+
 ### SSE 客户端
 
 ```typescript

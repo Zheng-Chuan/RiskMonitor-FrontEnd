@@ -7,10 +7,14 @@
 ```
 docs/
 ├── README.md                          # 文档导航入口（本文件）
+├── PRD.md                             # 产品需求总纲
+├── phases/                            # 分阶段规划
+│   └── phase-0-dual-app-foundation.md # 双应用最小闭环阶段
 ├── architecture/                      # 架构文档
 │   ├── overview.md                    # 系统架构概览
 │   ├── frontend.md                    # 前端架构详解
-│   └── data-model.md                  # 数据模型定义
+│   ├── data-model.md                  # 数据模型定义
+│   └── rest-bff-contract.md           # 前后端 REST BFF 接口契约
 ├── guides/                            # 开发指南
 │   ├── setup.md                       # 环境搭建指南
 │   ├── development.md                 # 开发流程指南
@@ -21,10 +25,18 @@ docs/
 └── decisions/                         # 架构决策记录（ADR）
     ├── 0001-tech-stack-selection.md   # 技术栈选型决策
     ├── 0002-multiagent-frontend-architecture.md  # MultiAgent 前端架构决策
-    └── 0003-volcengine-deployment.md  # ADR: 火山引擎部署决策
+    ├── 0003-volcengine-deployment.md  # ADR: 火山引擎部署决策
+    └── 0004-dual-app-repo-and-k8s-deployment.md  # ADR: 双应用仓库与 K8s 部署决策
 ```
 
 ## 文档索引
+
+### 产品与规划
+
+| 文档 | 路径 | 说明 |
+|------|------|------|
+| 产品需求总纲 | [PRD.md](PRD.md) | 项目目标、功能需求、非功能需求、发布准入标准 |
+| Phase 0 双应用闭环 | [phases/phase-0-dual-app-foundation.md](phases/phase-0-dual-app-foundation.md) | 当前阶段的开发目标、范围、验收标准和交付物 |
 
 ### 架构文档
 
@@ -33,6 +45,7 @@ docs/
 | 架构概览 | [architecture/overview.md](architecture/overview.md) | 系统总体架构设计、设计原则、核心概念说明 |
 | 前端架构 | [architecture/frontend.md](architecture/frontend.md) | 目录结构、状态管理、组件层级、通信层、路由设计 |
 | 数据模型 | [architecture/data-model.md](architecture/data-model.md) | TypeScript 核心类型定义、枚举、Store 状态结构 |
+| REST BFF 契约 | [architecture/rest-bff-contract.md](architecture/rest-bff-contract.md) | 前端调用后端最小闭环接口的请求响应协议 |
 
 ### 开发指南
 
@@ -55,7 +68,8 @@ docs/
 |------|------|------|
 | 技术栈选型 | [decisions/0001-tech-stack-selection.md](decisions/0001-tech-stack-selection.md) | React 19 + Vite 8 + TS 6 + Zustand + React Flow + SSE 的选型理由 |
 | MultiAgent 架构 | [decisions/0002-multiagent-frontend-architecture.md](decisions/0002-multiagent-frontend-architecture.md) | Zustand + React Flow + SSE + XState 的架构决策理由 |
-| 火山引擎部署 | [decisions/0003-volcengine-deployment.md](decisions/0003-volcengine-deployment.md) | 火山引擎 ECS + nginx + 轮询的部署决策理由 |
+| 火山引擎部署 | [decisions/0003-volcengine-deployment.md](decisions/0003-volcengine-deployment.md) | 早期单机 ECS MVP 路线的历史决策 |
+| 双应用仓库与 K8s 部署 | [decisions/0004-dual-app-repo-and-k8s-deployment.md](decisions/0004-dual-app-repo-and-k8s-deployment.md) | 当前默认实施路径, 即 FrontEnd 与 MultiAgent 保持双应用边界并统一在 K8s 闭环交付 |
 
 ### 根目录文档
 
@@ -94,5 +108,14 @@ docs/
 
 - 新增功能时同步更新相关架构文档和 CHANGELOG
 - 重大架构变更需新增 ADR 记录
+- 需求范围、开发目标和发布标准变化时同步更新 `PRD.md` 与对应 `phases/` 文档
 - 文档内容保持具体可操作，避免空泛描述
 - 每个文档控制在 100-300 行以内
+
+## 文档使用顺序
+
+1. 先在 `PRD.md` 中确认目标、范围和需求编号
+2. 再在 `decisions/` 中记录关键架构取舍和约束
+3. 然后在 `phases/` 中拆解当前阶段的开发目标、验收标准和交付物
+4. 编码时同步更新 `architecture/` 与 `guides/`
+5. 验收完成后回写 Phase 状态和 README 对外口径
