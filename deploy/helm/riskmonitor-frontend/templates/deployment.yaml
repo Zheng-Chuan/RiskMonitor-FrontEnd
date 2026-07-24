@@ -18,6 +18,9 @@ spec:
         - name: frontend
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: RISKMONITOR_API_UPSTREAM
+              value: {{ .Values.api.upstream | quote }}
           ports:
             - name: http
               containerPort: 80

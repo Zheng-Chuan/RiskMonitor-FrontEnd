@@ -36,6 +36,13 @@ export interface Artifact {
   updatedAt: number
 }
 
+/** 任务步骤 */
+export interface TaskStep {
+  id: string
+  title: string
+  status: TaskStatus
+}
+
 /** Task 任务 */
 export interface Task {
   id: string
@@ -51,5 +58,8 @@ export interface Task {
   createdAt: number
   startedAt?: number
   completedAt?: number
+  updatedAt?: number
   errorMessage?: string
+  resultSummary?: string
+  steps?: TaskStep[]
 }

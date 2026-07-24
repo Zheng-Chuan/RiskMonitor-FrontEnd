@@ -1,0 +1,10 @@
+image:
+  repository: riskmonitor/frontend
+  tag: k8s-local
+  pullPolicy: IfNotPresent
+
+api:
+  upstream: http://mcp-server:8000
+
+ingress:
+  enabled: false

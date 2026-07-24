@@ -66,6 +66,7 @@ export default defineConfig({
 
 - **用途**：端到端测试
 - **选择理由**：跨浏览器支持，API 现代化，自动等待
+- **当前要求**：涉及 FrontEnd 与 MultiAgent 的联调场景时 优先使用真实页面测试 不依赖人工点击验收 不允许 mock 后端
 
 ## 测试文件组织规范
 
@@ -73,7 +74,7 @@ export default defineConfig({
 
 - 测试文件与源文件同目录
 - 命名格式：`<source-name>.test.ts(x)`
-- E2E 测试放在 `e2e/` 目录，命名：`<flow-name>.spec.ts`
+- E2E 测试放在 `tests/e2e/` 目录，命名：`<flow-name>.spec.ts`
 
 ### 目录结构
 
@@ -95,9 +96,16 @@ src/
 │   └── format.test.ts               # 工具函数测试
 └── test/
     └── setup.ts                     # 测试全局配置
-e2e/
-├── chat-flow.spec.ts                # 对话流程 E2E
-└── canvas-drag.spec.ts              # 画布拖拽 E2E
+tests/
+├── e2e/
+│   ├── workspace.real.spec.ts         # 工作台真实页面联调
+│   └── chat-flow.spec.ts              # 对话流程 E2E
+├── integration/
+│   └── rest-bff.real.test.ts          # FrontEnd 到 MultiAgent 的真实 REST 联调
+└── unit/
+    ├── riskmonitor-api.test.ts        # API 适配层映射测试
+    ├── stores.test.ts                 # Zustand Store 测试
+    └── workspace-presenters.test.ts   # 展示层工具函数测试
 ```
 
 ## 测试覆盖率目标
@@ -223,6 +231,15 @@ test('用户发送消息后应收到流式回复', async ({ page }) => {
 # 运行所有单元/集成测试
 npx vitest
 
+# 运行基础单测
+npm run test:unit
+
+# 运行真实 REST 联调测试
+VITE_API_BASE_URL=http://127.0.0.1:18080 npm run test:integration:rest
+
+# 自动拉起 MultiAgent 执行真实 REST 联调
+npm run test:integration:rest:local
+
 # 运行测试并生成覆盖率报告
 npx vitest run --coverage
 
@@ -231,6 +248,9 @@ npx vitest watch
 
 # 运行 E2E 测试
 npx playwright test
+
+# 自动拉起 FrontEnd 和 MultiAgent 执行真实页面联调
+npm run test:e2e:workspace
 
 # 查看 E2E 测试报告
 npx playwright show-report

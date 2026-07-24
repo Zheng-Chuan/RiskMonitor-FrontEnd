@@ -9,8 +9,13 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest",
+    "test:unit": "vitest run tests/unit",
+    "test:integration:rest": "vitest run tests/integration/rest-bff.real.test.ts",
+    "test:integration:rest:local": "node ./scripts/run-real-rest-integration.mjs",
     "test:coverage": "vitest run --coverage",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:e2e:workspace": "playwright test tests/e2e/workspace.real.spec.ts",
+    "test:e2e:workspace:k8s": "node ./scripts/run-k8s-workspace-e2e.mjs"
   },
   "dependencies": {
     "@xyflow/react": "^12.11.1",

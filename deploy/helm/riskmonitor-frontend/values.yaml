@@ -9,6 +9,9 @@ service:
   type: ClusterIP
   port: 80
 
+api:
+  upstream: http://mcp-server:8000
+
 ingress:
   enabled: true
   className: nginx

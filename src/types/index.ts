@@ -7,6 +7,7 @@ export type {
   TaskPriority,
   Artifact,
   ArtifactType,
+  TaskStep,
 } from './task'
 export type {
   Message,

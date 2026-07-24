@@ -10,6 +10,7 @@ docs/
 ├── PRD.md                             # 产品需求总纲
 ├── phases/                            # 分阶段规划
 │   └── phase-0-dual-app-foundation.md # 双应用最小闭环阶段
+│   └── phase-1-light-theme-and-memory-observability.md # 浅色工作台与记忆可观测性
 ├── architecture/                      # 架构文档
 │   ├── overview.md                    # 系统架构概览
 │   ├── frontend.md                    # 前端架构详解
@@ -19,6 +20,8 @@ docs/
 │   ├── setup.md                       # 环境搭建指南
 │   ├── development.md                 # 开发流程指南
 │   └── deployment.md                  # 部署指南
+├── testing/                           # 测试与联调说明
+│   └── rest-bff-integration.md        # FrontEnd 到 MultiAgent 的真实 REST 联调测试
 ├── standards/                         # 开发规范
 │   ├── coding-conventions.md          # 编码规范
 │   └── testing.md                     # 测试规范
@@ -37,6 +40,7 @@ docs/
 |------|------|------|
 | 产品需求总纲 | [PRD.md](PRD.md) | 项目目标、功能需求、非功能需求、发布准入标准 |
 | Phase 0 双应用闭环 | [phases/phase-0-dual-app-foundation.md](phases/phase-0-dual-app-foundation.md) | 当前阶段的开发目标、范围、验收标准和交付物 |
+| Phase 1 浅色工作台与记忆可观测性 | [phases/phase-1-light-theme-and-memory-observability.md](phases/phase-1-light-theme-and-memory-observability.md) | 定义浅色主题改版和实时记忆展示的阶段目标、范围和验收标准 |
 
 ### 架构文档
 
@@ -54,6 +58,12 @@ docs/
 | 环境搭建 | [guides/setup.md](guides/setup.md) | 前置要求、安装步骤、开发命令、编辑器配置、常见问题 |
 | 开发流程 | [guides/development.md](guides/development.md) | 开发工作流、代码组织、调试技巧、组件模板、状态管理实践 |
 | 部署指南 | [guides/deployment.md](guides/deployment.md) | 架构总览、火山引擎 ECS 部署、nginx 配置、成本估算、升级路径 |
+
+### 测试与联调
+
+| 文档 | 路径 | 说明 |
+|------|------|------|
+| REST BFF 联调测试 | [testing/rest-bff-integration.md](testing/rest-bff-integration.md) | FrontEnd 通过本地 K8s 生产等价链路联调 MultiAgent REST BFF 的执行方式和验收标准 |
 
 ### 开发规范
 
