@@ -1,24 +1,29 @@
 /* styles/variables.css */
 
 :root {
-  /* Colors - Figma-inspired dark theme */
-  --color-primary: #818cf8;
-  --color-primary-light: rgba(129, 140, 248, 0.16);
-  --color-primary-border: rgba(129, 140, 248, 0.4);
-  --color-bg: #090d16;
-  --color-bg-secondary: #0f172a;
-  --color-panel: rgba(15, 23, 42, 0.82);
-  --color-panel-elevated: rgba(10, 15, 28, 0.88);
-  --color-text: #e2e8f0;
-  --color-text-heading: #f8fafc;
-  --color-text-secondary: #cbd5e1;
-  --color-text-muted: #94a3b8;
-  --color-border: rgba(148, 163, 184, 0.16);
-  --color-border-strong: rgba(129, 140, 248, 0.2);
-  --color-success: #34d399;
-  --color-warning: #fbbf24;
-  --color-error: #fb7185;
-  --color-code-bg: rgba(15, 23, 42, 0.9);
+  /* Colors - light workspace theme */
+  --color-primary: #38bdf8;
+  --color-primary-light: rgba(56, 189, 248, 0.12);
+  --color-primary-border: rgba(14, 165, 233, 0.34);
+  --color-bg: #f7fbff;
+  --color-bg-secondary: #eef6fb;
+  --color-panel: #ffffff;
+  --color-panel-elevated: #ffffff;
+  --color-surface-muted: #f8fbff;
+  --color-surface-subtle: #eef7ff;
+  --color-text: #0f172a;
+  --color-text-heading: #020617;
+  --color-text-secondary: #334155;
+  --color-text-muted: #64748b;
+  --color-border: rgba(148, 163, 184, 0.22);
+  --color-border-strong: rgba(56, 189, 248, 0.24);
+  --color-success: #059669;
+  --color-warning: #d97706;
+  --color-error: #dc2626;
+  --color-success-soft: rgba(16, 185, 129, 0.12);
+  --color-warning-soft: rgba(245, 158, 11, 0.14);
+  --color-error-soft: rgba(239, 68, 68, 0.12);
+  --color-code-bg: #eff6ff;
 
   /* Spacing */
   --spacing-xs: 4px;
@@ -46,9 +51,9 @@
   --radius-2xl: 28px;
 
   /* Shadows */
-  --shadow-sm: 0 8px 18px rgba(2, 6, 23, 0.14);
-  --shadow-md: 0 14px 30px rgba(2, 6, 23, 0.2);
-  --shadow-lg: 0 24px 60px rgba(2, 6, 23, 0.35);
+  --shadow-sm: 0 8px 18px rgba(148, 163, 184, 0.12);
+  --shadow-md: 0 14px 30px rgba(148, 163, 184, 0.16);
+  --shadow-lg: 0 24px 48px rgba(148, 163, 184, 0.18);
 
   /* Transitions */
   --transition-fast: 150ms ease;

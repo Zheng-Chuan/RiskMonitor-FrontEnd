@@ -1,7 +1,7 @@
 // @vitest-environment node
 
-import { createTask, getAgents, getTask } from '@/api/riskmonitor-api'
-import type { Task } from '@/types'
+import { createTask, getAgents, getMemory, getTask, getTaskMemory } from '@/api/riskmonitor-api'
+import type { MemorySnapshot, Task } from '@/types'
 
 const REQUIRED_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 const SNAPSHOT_TIMEOUT_MS = Number(import.meta.env.VITE_REST_BFF_TIMEOUT_MS ?? 30_000)
@@ -33,6 +33,26 @@ async function waitForTaskSnapshot(
   return latestTask
 }
 
+async function waitForMemorySnapshot(
+  taskId: string,
+  predicate: (snapshot: MemorySnapshot) => boolean,
+  timeoutMs: number,
+): Promise<MemorySnapshot> {
+  const startedAt = Date.now()
+  let latestSnapshot = await getTaskMemory(taskId)
+
+  while (!predicate(latestSnapshot)) {
+    if (Date.now() - startedAt > timeoutMs) {
+      throw new Error(`memory snapshot for task ${taskId} did not satisfy predicate within ${timeoutMs}ms`)
+    }
+
+    await sleep(SNAPSHOT_INTERVAL_MS)
+    latestSnapshot = await getTaskMemory(taskId)
+  }
+
+  return latestSnapshot
+}
+
 describe('real REST BFF integration', () => {
   beforeAll(() => {
     if (!REQUIRED_API_BASE_URL) {
@@ -46,6 +66,16 @@ describe('real REST BFF integration', () => {
     expect(snapshot.updatedAt).toBeGreaterThan(0)
     expect(snapshot.items.length).toBeGreaterThan(0)
     expect(snapshot.items.some((agent) => agent.id === 'system_engineer')).toBe(true)
+  })
+
+  it('fetches real memory snapshot from multiagent service', async () => {
+    const snapshot = await getMemory()
+
+    expect(snapshot.updatedAt).toBeGreaterThan(0)
+    expect(Array.isArray(snapshot.items)).toBe(true)
+    if (snapshot.summary) {
+      expect(snapshot.summary.agentCount).toBeGreaterThanOrEqual(0)
+    }
   })
 
   it('creates a real task and polls live task snapshots', async () => {
@@ -90,5 +120,21 @@ describe('real REST BFF integration', () => {
     expect(progressedSnapshot.status).toBe('in_progress')
     expect(progressedSnapshot.updatedAt).toBeGreaterThanOrEqual(progressedSnapshot.createdAt)
     expect(progressedSnapshot.errorMessage ?? '').toBe('')
+  })
+
+  it('fetches task-scoped memory snapshot after task submission', async () => {
+    const description = `前端任务记忆联调 ${Date.now()}`
+    const created = await createTask({ description })
+
+    expect(created.task_id).toBeTruthy()
+
+    const taskMemory = await waitForMemorySnapshot(
+      created.task_id,
+      (snapshot) => snapshot.taskId === created.task_id,
+      5_000,
+    )
+
+    expect(taskMemory.taskId).toBe(created.task_id)
+    expect(Array.isArray(taskMemory.items)).toBe(true)
   })
 })

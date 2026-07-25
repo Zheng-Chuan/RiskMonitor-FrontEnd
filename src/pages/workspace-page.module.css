@@ -5,6 +5,7 @@
 }
 
 .actionButton,
+.actionButtonSecondary,
 .actionLink,
 .submitButton,
 .taskItem {
@@ -12,6 +13,7 @@
 }
 
 .actionButton,
+.actionButtonSecondary,
 .actionLink,
 .submitButton {
   display: inline-flex;
@@ -29,9 +31,15 @@
 
 .actionButton,
 .submitButton {
-  border: 1px solid rgba(129, 140, 248, 0.34);
-  color: #eef2ff;
-  background: rgba(99, 102, 241, 0.18);
+  border: 1px solid rgba(14, 165, 233, 0.34);
+  color: #075985;
+  background: rgba(56, 189, 248, 0.16);
+}
+
+.actionButtonSecondary {
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  color: var(--color-text-secondary);
+  background: rgba(255, 255, 255, 0.88);
 }
 
 .actionLink {
@@ -132,7 +140,7 @@
   border-radius: var(--radius-lg);
   resize: vertical;
   color: var(--color-text);
-  background: rgba(15, 23, 42, 0.48);
+  background: rgba(255, 255, 255, 0.96);
 }
 
 .textarea:focus {
@@ -163,12 +171,12 @@
   border: 1px solid rgba(148, 163, 184, 0.14);
   border-radius: var(--radius-lg);
   text-align: left;
-  background: rgba(15, 23, 42, 0.36);
+  background: rgba(248, 250, 252, 0.94);
 }
 
 .taskItemActive {
-  border-color: rgba(129, 140, 248, 0.38);
-  background: rgba(99, 102, 241, 0.12);
+  border-color: rgba(14, 165, 233, 0.3);
+  background: rgba(224, 242, 254, 0.9);
 }
 
 .detailMeta {
@@ -176,7 +184,7 @@
   padding: var(--spacing-md);
   border: 1px solid rgba(148, 163, 184, 0.14);
   border-radius: var(--radius-lg);
-  background: rgba(15, 23, 42, 0.32);
+  background: rgba(248, 250, 252, 0.96);
 }
 
 .description,
@@ -188,7 +196,7 @@
   padding: var(--spacing-md);
   border: 1px solid rgba(148, 163, 184, 0.12);
   border-radius: var(--radius-lg);
-  background: rgba(15, 23, 42, 0.28);
+  background: rgba(248, 250, 252, 0.96);
 }
 
 .sectionBlock h3 {
@@ -202,7 +210,7 @@
   padding: var(--spacing-md);
   border: 1px solid rgba(148, 163, 184, 0.12);
   border-radius: var(--radius-lg);
-  background: rgba(15, 23, 42, 0.32);
+  background: rgba(248, 250, 252, 0.96);
 }
 
 .artifactItem,
@@ -228,11 +236,11 @@
   display: inline-flex;
   align-items: center;
   padding: 6px 10px;
-  border: 1px solid rgba(129, 140, 248, 0.24);
+  border: 1px solid rgba(14, 165, 233, 0.22);
   border-radius: 999px;
-  color: #c7d2fe;
+  color: #0369a1;
   font-size: var(--font-size-xs);
-  background: rgba(99, 102, 241, 0.12);
+  background: rgba(224, 242, 254, 0.88);
 }
 
 .warningMessage,
@@ -245,14 +253,122 @@
 
 .warningMessage {
   border: 1px solid rgba(251, 191, 36, 0.25);
-  color: #fde68a;
-  background: rgba(120, 53, 15, 0.3);
+  color: #92400e;
+  background: rgba(254, 243, 199, 0.9);
 }
 
 .errorMessage {
   border: 1px solid rgba(251, 113, 133, 0.28);
-  color: #fecdd3;
-  background: rgba(136, 19, 55, 0.26);
+  color: #b91c1c;
+  background: rgba(254, 226, 226, 0.92);
+}
+
+.memoryPanelMeta,
+.memorySummary,
+.memoryMetaRow,
+.memoryItemHeader,
+.memoryItemTitleBlock {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.memoryPanelMeta,
+.memoryItemHeader {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.memoryPanelMeta {
+  flex-wrap: wrap;
+}
+
+.memorySummary {
+  flex-wrap: wrap;
+}
+
+.memorySummary span,
+.memorySyncText,
+.memoryMetaRow span,
+.memoryScope {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.memoryList,
+.memoryDetailList {
+  display: flex;
+  flex-direction: column;
+}
+
+.memoryList {
+  gap: var(--spacing-md);
+}
+
+.memoryItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: var(--radius-lg);
+  background: rgba(248, 250, 252, 0.96);
+}
+
+.memoryItemTitleBlock {
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.memoryChangeBadge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.memoryChangeCreated {
+  color: #075985;
+  background: rgba(56, 189, 248, 0.14);
+  border-color: rgba(14, 165, 233, 0.24);
+}
+
+.memoryChangeUpdated {
+  color: #0f766e;
+  background: rgba(45, 212, 191, 0.14);
+  border-color: rgba(13, 148, 136, 0.22);
+}
+
+.memoryChangeCompressed {
+  color: #92400e;
+  background: rgba(251, 191, 36, 0.16);
+  border-color: rgba(217, 119, 6, 0.22);
+}
+
+.memoryChangeArchived {
+  color: #6b7280;
+  background: rgba(203, 213, 225, 0.28);
+  border-color: rgba(148, 163, 184, 0.24);
+}
+
+.memorySummaryText {
+  margin: 0;
+  line-height: 1.7;
+  color: var(--color-text);
+}
+
+.memoryMetaRow {
+  flex-wrap: wrap;
+}
+
+.memoryDetailList {
+  gap: 6px;
+  margin: 0;
+  padding-left: 18px;
+  color: var(--color-text-secondary);
 }
 
 @media (max-width: 1360px) {
@@ -282,7 +398,9 @@
   .detailMeta,
   .stepItem,
   .agentHeader,
-  .artifactHeader {
+  .artifactHeader,
+  .memoryPanelMeta,
+  .memoryItemHeader {
     align-items: flex-start;
     flex-direction: column;
   }

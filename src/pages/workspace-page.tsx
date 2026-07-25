@@ -25,6 +25,24 @@ function getTaskTone(status: 'pending' | 'in_progress' | 'completed' | 'failed' 
   }
 }
 
+function getMemoryChangeLabel(changeType: 'created' | 'updated' | 'compressed' | 'archived') {
+  switch (changeType) {
+    case 'updated':
+      return '更新'
+    case 'compressed':
+      return '沉淀'
+    case 'archived':
+      return '归档'
+    case 'created':
+    default:
+      return '新增'
+  }
+}
+
+function getMemoryScopeLabel(scope: 'shared' | 'private') {
+  return scope === 'private' ? '私有记忆' : '共享记忆'
+}
+
 export function WorkspacePage() {
   const {
     activeTask,
@@ -32,11 +50,17 @@ export function WorkspacePage() {
     draft,
     hasTasks,
     isRefreshingAgents,
+    isRefreshingMemory,
     isSubmitting,
+    lastMemorySyncedAt,
     lastSyncedAt,
+    memoryError,
+    memoryItems,
+    memorySummary,
     orderedAgents,
     orderedTasks,
     refreshAgents,
+    refreshMemory,
     setActiveTask,
     setDraft,
     submitError,
@@ -61,6 +85,15 @@ export function WorkspacePage() {
             }}
           >
             {isRefreshingAgents ? '刷新中' : '刷新智能体'}
+          </button>
+          <button
+            type="button"
+            className={styles.actionButtonSecondary}
+            onClick={() => {
+              void refreshMemory(activeTask?.id ?? null)
+            }}
+          >
+            {isRefreshingMemory ? '记忆刷新中' : '刷新记忆'}
           </button>
           <Link to="/settings" className={styles.actionLink}>
             接口与部署约束
@@ -277,6 +310,61 @@ export function WorkspacePage() {
               <div className={styles.emptyState}>
                 <strong>智能体列表暂不可用</strong>
                 <p>如果后端尚未实现 /api/agents, 页面会保留这个提示并继续允许本地布局验证.</p>
+              </div>
+            )}
+          </SurfaceCard>
+
+          <SurfaceCard
+            title="系统记忆"
+            eyebrow="Memory Panel"
+            aside={<span className={styles.queueHint}>{memoryItems.length} 条</span>}
+          >
+            <div className={styles.memoryPanelMeta}>
+              <div className={styles.memorySummary}>
+                <span data-testid="memory-shared-count">共享 {memorySummary?.sharedCount ?? 0}</span>
+                <span data-testid="memory-private-count">私有 {memorySummary?.privateCount ?? 0}</span>
+                <span data-testid="memory-agent-count">Agent {memorySummary?.agentCount ?? 0}</span>
+              </div>
+              <span className={styles.memorySyncText} data-testid="memory-last-sync">
+                {lastMemorySyncedAt ? `最近刷新 ${formatTimestamp(lastMemorySyncedAt)}` : '最近刷新 --:--:--'}
+              </span>
+            </div>
+
+            {memoryError ? <p className={styles.errorMessage} data-testid="memory-error">{memoryError}</p> : null}
+
+            {memoryItems.length > 0 ? (
+              <div className={styles.memoryList} data-testid="memory-panel">
+                {memoryItems.map((item) => (
+                  <article key={item.id} className={styles.memoryItem} data-testid={`memory-item-${item.id}`}>
+                    <div className={styles.memoryItemHeader}>
+                      <div className={styles.memoryItemTitleBlock}>
+                        <strong>{item.agentId}</strong>
+                        <span className={styles.memoryScope}>{getMemoryScopeLabel(item.scope)}</span>
+                      </div>
+                      <span className={`${styles.memoryChangeBadge} ${styles[`memoryChange${item.changeType[0].toUpperCase()}${item.changeType.slice(1)}`]}`}>
+                        {getMemoryChangeLabel(item.changeType)}
+                      </span>
+                    </div>
+                    <p className={styles.memorySummaryText} data-testid={`memory-summary-${item.id}`}>{item.summary}</p>
+                    <div className={styles.memoryMetaRow}>
+                      <span>{item.kind}</span>
+                      <span>{item.memoryType}</span>
+                      <span>{formatTimestamp(item.createdAt)}</span>
+                    </div>
+                    {item.details.length > 0 ? (
+                      <ul className={styles.memoryDetailList}>
+                        {item.details.map((detail) => (
+                          <li key={`${item.id}-${detail}`}>{detail}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className={styles.emptyState} data-testid="memory-panel-empty">
+                <strong>当前暂无系统记忆</strong>
+                <p>任务开始执行后, 这里会展示 Agent 内部记忆变化.</p>
               </div>
             )}
           </SurfaceCard>

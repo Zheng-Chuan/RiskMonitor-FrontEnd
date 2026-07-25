@@ -10,9 +10,9 @@
 }
 
 .primaryAction {
-  border-color: rgba(129, 140, 248, 0.35);
-  background: rgba(99, 102, 241, 0.2);
-  color: #eef2ff;
+  border-color: rgba(14, 165, 233, 0.35);
+  background: rgba(56, 189, 248, 0.18);
+  color: #0c4a6e;
 }
 
 .secondaryAction {
@@ -55,9 +55,9 @@
   display: inline-flex;
   width: fit-content;
   padding: 6px 12px;
-  border: 1px solid rgba(129, 140, 248, 0.3);
+  border: 1px solid rgba(14, 165, 233, 0.24);
   border-radius: 999px;
-  color: #c7d2fe;
+  color: #0369a1;
   font-size: var(--font-size-xs);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -86,7 +86,7 @@
   padding: var(--spacing-md);
   border: 1px solid rgba(148, 163, 184, 0.14);
   border-radius: var(--radius-xl);
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(248, 250, 252, 0.92);
 }
 
 .previewHeader,
@@ -115,7 +115,7 @@
 }
 
 .previewSidebar {
-  background: rgba(30, 41, 59, 0.45);
+  background: rgba(241, 245, 249, 0.95);
   display: grid;
   place-items: center;
   padding: var(--spacing-md);
@@ -125,7 +125,7 @@
   display: grid;
   place-content: center;
   gap: var(--spacing-sm);
-  background: rgba(15, 23, 42, 0.56);
+  background: rgba(239, 246, 255, 0.95);
 }
 
 .previewLabel {
@@ -136,12 +136,12 @@
 
 .previewNode {
   padding: 8px 12px;
-  border: 1px solid rgba(129, 140, 248, 0.24);
+  border: 1px solid rgba(14, 165, 233, 0.24);
   border-radius: 12px;
-  color: #e2e8f0;
+  color: #0f172a;
   font-size: var(--font-size-sm);
   text-align: center;
-  background: rgba(51, 65, 85, 0.7);
+  background: rgba(255, 255, 255, 0.94);
 }
 
 .taskPreviewList {
@@ -156,11 +156,11 @@
   padding: var(--spacing-md);
   border: 1px solid rgba(148, 163, 184, 0.14);
   border-radius: var(--radius-lg);
-  background: rgba(15, 23, 42, 0.38);
+  background: rgba(248, 250, 252, 0.92);
 }
 
 .taskPreviewProgress {
-  color: #a5b4fc;
+  color: #0284c7;
   font-weight: 700;
 }
 

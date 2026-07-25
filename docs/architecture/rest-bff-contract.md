@@ -7,6 +7,7 @@
 - 为 FrontEnd 提供稳定的浏览器接口
 - 隔离 MultiAgent 内部 MCP 协议和工作流复杂度
 - 支持 `提交任务 -> 轮询状态 -> 展示结果` 的最小闭环
+- 支持浏览器观察结构化 memory 视图而不直接访问 Redis
 
 ## 协议原则
 
@@ -15,6 +16,7 @@
 - 所有业务接口统一挂在 `/api/*`
 - 时间字段统一使用 Unix 毫秒时间戳
 - 未落地的字段不在接口中承诺
+- memory 数据必须经过后端脱敏和结构化整理
 
 ## 部署关系
 
@@ -180,6 +182,109 @@ graph TB
 }
 ```
 
+## 5. 查询全局记忆快照
+
+### 请求
+
+- 方法: `GET`
+- 路径: `/api/memory`
+
+### 查询参数
+
+- `limit`: 可选, 默认 `20`
+
+### 成功响应
+
+```json
+{
+  "items": [
+    {
+      "id": "mem_xxx",
+      "taskId": "run_123456",
+      "sessionId": "session_123456",
+      "agentId": "system_engineer",
+      "scope": "shared",
+      "kind": "working_memory",
+      "memoryType": "episodic",
+      "changeType": "updated",
+      "summary": "step step_2 kind=delegate status=completed agent=system_engineer",
+      "details": [
+        "任务 run_123456",
+        "来源 task_graph_execution"
+      ],
+      "tags": ["delegate", "completed", "execution"],
+      "confidence": 1,
+      "createdAt": 1784803205000
+    }
+  ],
+  "updated_at": 1784803205000
+}
+```
+
+## 6. 查询任务记忆视图
+
+### 请求
+
+- 方法: `GET`
+- 路径: `/api/tasks/{task_id}/memory`
+
+### 查询参数
+
+- `limit`: 可选, 默认 `30`
+
+### 成功响应
+
+```json
+{
+  "task_id": "run_123456",
+  "session_id": "session_123456",
+  "items": [
+    {
+      "id": "mem_xxx",
+      "taskId": "run_123456",
+      "sessionId": "session_123456",
+      "agentId": "orchestrator",
+      "scope": "shared",
+      "kind": "plan",
+      "memoryType": "episodic",
+      "changeType": "created",
+      "summary": "plan generated",
+      "details": [
+        "来源 orchestrator_plan",
+        "标签 plan"
+      ],
+      "tags": ["plan"],
+      "confidence": 1,
+      "createdAt": 1784803201000
+    }
+  ],
+  "summary": {
+    "sharedCount": 8,
+    "privateCount": 3,
+    "agentCount": 4
+  },
+  "updated_at": 1784803205000
+}
+```
+
+### memory 字段说明
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `id` | string | memory 条目标识 |
+| `taskId` | string \| null | 所属任务 |
+| `sessionId` | string \| null | 所属会话 |
+| `agentId` | string | 来源智能体 |
+| `scope` | string | `shared` 或 `private` |
+| `kind` | string | 原始记忆种类 |
+| `memoryType` | string | `episodic` `semantic` `procedural` |
+| `changeType` | string | `created` `updated` `compressed` `archived` |
+| `summary` | string | 面向页面展示的结构化摘要 |
+| `details` | array | 补充说明列表 |
+| `tags` | array | 记忆标签 |
+| `confidence` | number | 置信度 |
+| `createdAt` | number | 生成时间 |
+
 ## 状态映射
 
 ### 后端任务状态到前端任务状态
@@ -191,6 +296,15 @@ graph TB
 | `completed` | `completed` |
 | `failed` | `failed` |
 | `cancelled` | `cancelled` |
+
+### memory 变化类型
+
+| 后端记忆类型 | 前端 `changeType` |
+|--------------|-------------------|
+| `plan` `intent_disambiguation` `approval` `final` | `created` |
+| `working_memory` `private_task_state` | `updated` |
+| `lesson` `semantic_case` | `compressed` |
+| 其他 | `created` |
 
 ### 后端智能体状态到前端智能体状态
 
@@ -232,6 +346,8 @@ graph TB
 - 轮询间隔建议为 2 秒
 - 当任务进入 `completed` `failed` `cancelled` 时停止轮询
 - 连续失败 3 次后给出错误提示, 由用户决定是否重试
+- memory 轮询间隔建议与任务轮询保持一致, 默认 2 秒
+- 当没有 active task 时, 页面可以轮询 `/api/memory` 获取最近记忆快照
 
 ## 鉴权约束
 

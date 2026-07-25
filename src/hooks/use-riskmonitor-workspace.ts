@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { createDraftTask, createTask, getAgents, getTask } from '@/api/riskmonitor-api'
+import { createDraftTask, createTask, getAgents, getMemory, getTask, getTaskMemory } from '@/api/riskmonitor-api'
 import { useAgentStore } from '@/store/agent-store'
 import { useTaskStore } from '@/store/task-store'
 import { POLLING_INTERVAL } from '@/utils/constants'
-import type { Agent, Task, TaskStatus } from '@/types'
+import type { Agent, MemoryItem, MemorySnapshotSummary, Task, TaskStatus } from '@/types'
 
 function isTerminalTaskStatus(status: TaskStatus): boolean {
   return status === 'completed' || status === 'failed' || status === 'cancelled'
@@ -16,7 +16,12 @@ export function useRiskMonitorWorkspace() {
   const [isRefreshingAgents, setIsRefreshingAgents] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [agentsError, setAgentsError] = useState<string | null>(null)
+  const [memoryError, setMemoryError] = useState<string | null>(null)
   const [lastSyncedAt, setLastSyncedAt] = useState<number | null>(null)
+  const [lastMemorySyncedAt, setLastMemorySyncedAt] = useState<number | null>(null)
+  const [memoryItems, setMemoryItems] = useState<MemoryItem[]>([])
+  const [memorySummary, setMemorySummary] = useState<MemorySnapshotSummary | null>(null)
+  const [isRefreshingMemory, setIsRefreshingMemory] = useState(false)
   const pollTimerRef = useRef<number | null>(null)
 
   const tasks = useTaskStore((state) => state.tasks)
@@ -83,6 +88,23 @@ export function useRiskMonitorWorkspace() {
     }
   }, [syncAgentsToStore])
 
+  const refreshMemory = useCallback(async (taskId?: string | null) => {
+    setIsRefreshingMemory(true)
+
+    try {
+      const snapshot = taskId ? await getTaskMemory(taskId) : await getMemory()
+      setMemoryItems(snapshot.items)
+      setMemorySummary(snapshot.summary ?? null)
+      setLastMemorySyncedAt(snapshot.updatedAt)
+      setMemoryError(null)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : '记忆面板刷新失败'
+      setMemoryError(message)
+    } finally {
+      setIsRefreshingMemory(false)
+    }
+  }, [])
+
   const pollTask = useCallback(
     async (taskId: string) => {
       try {
@@ -90,6 +112,7 @@ export function useRiskMonitorWorkspace() {
         updateTask(taskId, task)
         setLastSyncedAt(task.updatedAt ?? Date.now())
         setSubmitError(null)
+        await refreshMemory(task.id)
 
         if (!isTerminalTaskStatus(task.status)) {
           pollTimerRef.current = window.setTimeout(() => {
@@ -106,7 +129,7 @@ export function useRiskMonitorWorkspace() {
         clearPolling()
       }
     },
-    [clearPolling, refreshAgents, updateTask],
+    [clearPolling, refreshAgents, refreshMemory, updateTask],
   )
 
   const submitTask = useCallback(async () => {
@@ -144,17 +167,27 @@ export function useRiskMonitorWorkspace() {
     }
   }, [clearPolling, refreshAgents])
 
+  useEffect(() => {
+    void refreshMemory(activeTask?.id ?? null)
+  }, [activeTask?.id, refreshMemory])
+
   return {
     activeTask,
     agentsError,
     draft,
     hasTasks: orderedTasks.length > 0,
     isRefreshingAgents,
+    isRefreshingMemory,
     isSubmitting,
+    lastMemorySyncedAt,
     lastSyncedAt,
+    memoryError,
+    memoryItems,
+    memorySummary,
     orderedAgents,
     orderedTasks,
     refreshAgents,
+    refreshMemory,
     setActiveTask,
     setDraft,
     submitError,

@@ -1,6 +1,17 @@
 import { API_ENDPOINTS } from '@/api/endpoints'
 import { httpClient } from '@/api/http-client'
-import type { Agent, AgentRole, AgentStatus, Artifact, Task, TaskStatus, TaskStep } from '@/types'
+import type {
+  Agent,
+  AgentRole,
+  AgentStatus,
+  Artifact,
+  MemoryChangeType,
+  MemoryItem,
+  MemorySnapshot,
+  Task,
+  TaskStatus,
+  TaskStep,
+} from '@/types'
 
 type BackendTaskStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled'
 type BackendAgentStatus = AgentStatus | 'working'
@@ -61,6 +72,36 @@ interface BackendAgentList {
   updated_at?: number
 }
 
+interface BackendMemoryItem {
+  id: string
+  taskId?: string | null
+  sessionId?: string | null
+  agentId: string
+  scope: 'shared' | 'private'
+  kind: string
+  memoryType: string
+  changeType: MemoryChangeType
+  summary: string
+  details?: string[]
+  tags?: string[]
+  confidence?: number
+  createdAt: number
+}
+
+interface BackendMemorySummary {
+  sharedCount: number
+  privateCount: number
+  agentCount: number
+}
+
+interface BackendMemorySnapshot {
+  task_id?: string
+  session_id?: string
+  items: BackendMemoryItem[]
+  summary?: BackendMemorySummary
+  updated_at?: number
+}
+
 export interface CreateTaskInput {
   description: string
 }
@@ -68,6 +109,34 @@ export interface CreateTaskInput {
 export interface AgentsSnapshot {
   items: Agent[]
   updatedAt: number
+}
+
+function mapMemoryItem(item: BackendMemoryItem): MemoryItem {
+  return {
+    id: item.id,
+    taskId: item.taskId ?? undefined,
+    sessionId: item.sessionId ?? undefined,
+    agentId: item.agentId,
+    scope: item.scope,
+    kind: item.kind,
+    memoryType: item.memoryType,
+    changeType: item.changeType,
+    summary: item.summary,
+    details: item.details ?? [],
+    tags: item.tags ?? [],
+    confidence: item.confidence ?? 0,
+    createdAt: item.createdAt,
+  }
+}
+
+function mapMemorySnapshot(response: BackendMemorySnapshot): MemorySnapshot {
+  return {
+    items: response.items.map(mapMemoryItem),
+    summary: response.summary,
+    updatedAt: response.updated_at ?? Date.now(),
+    taskId: response.task_id ?? undefined,
+    sessionId: response.session_id ?? undefined,
+  }
 }
 
 function mapTaskStatus(status: BackendTaskStatus): TaskStatus {
@@ -190,4 +259,14 @@ export async function getAgents(): Promise<AgentsSnapshot> {
     items: response.items.map((item) => mapAgent(item, updatedAt)),
     updatedAt,
   }
+}
+
+export async function getMemory(limit = 20): Promise<MemorySnapshot> {
+  const response = await httpClient.get<BackendMemorySnapshot>(`${API_ENDPOINTS.getMemory}?limit=${limit}`)
+  return mapMemorySnapshot(response)
+}
+
+export async function getTaskMemory(taskId: string, limit = 30): Promise<MemorySnapshot> {
+  const response = await httpClient.get<BackendMemorySnapshot>(`${API_ENDPOINTS.getTaskMemory(taskId)}?limit=${limit}`)
+  return mapMemorySnapshot(response)
 }

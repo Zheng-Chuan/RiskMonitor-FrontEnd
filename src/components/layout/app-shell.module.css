@@ -2,8 +2,8 @@
   min-height: 100vh;
   padding: var(--spacing-xl);
   background:
-    radial-gradient(circle at top left, rgba(99, 102, 241, 0.2), transparent 28%),
-    radial-gradient(circle at top right, rgba(34, 211, 238, 0.14), transparent 24%),
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 28%),
+    radial-gradient(circle at top right, rgba(14, 165, 233, 0.1), transparent 24%),
     var(--color-bg);
 }
 
@@ -31,10 +31,10 @@
   justify-content: center;
   width: 52px;
   height: 52px;
-  border: 1px solid rgba(129, 140, 248, 0.4);
+  border: 1px solid rgba(14, 165, 233, 0.28);
   border-radius: 18px;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(34, 211, 238, 0.22));
-  color: #f8fafc;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(125, 211, 252, 0.32));
+  color: #0f172a;
   font-weight: 700;
   letter-spacing: 0.06em;
 }
@@ -74,7 +74,7 @@
   padding: 6px;
   border: 1px solid var(--color-border);
   border-radius: 999px;
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .navItem {
@@ -92,8 +92,8 @@
 }
 
 .navItemActive {
-  background: rgba(99, 102, 241, 0.18);
-  color: #eef2ff;
+  background: rgba(56, 189, 248, 0.14);
+  color: #0c4a6e;
 }
 
 .actions {

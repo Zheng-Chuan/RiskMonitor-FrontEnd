@@ -16,29 +16,29 @@
 .cancelled {
   background: rgba(148, 163, 184, 0.12);
   border-color: rgba(148, 163, 184, 0.22);
-  color: #cbd5e1;
+  color: #475569;
 }
 
 .assigned {
   background: rgba(56, 189, 248, 0.14);
   border-color: rgba(56, 189, 248, 0.28);
-  color: #7dd3fc;
+  color: #0369a1;
 }
 
 .working {
-  background: rgba(99, 102, 241, 0.18);
-  border-color: rgba(129, 140, 248, 0.32);
-  color: #c7d2fe;
+  background: rgba(56, 189, 248, 0.14);
+  border-color: rgba(14, 165, 233, 0.32);
+  color: #0c4a6e;
 }
 
 .completed {
   background: rgba(16, 185, 129, 0.16);
   border-color: rgba(16, 185, 129, 0.3);
-  color: #86efac;
+  color: #047857;
 }
 
 .failed {
   background: rgba(239, 68, 68, 0.16);
   border-color: rgba(248, 113, 113, 0.3);
-  color: #fca5a5;
+  color: #b91c1c;
 }

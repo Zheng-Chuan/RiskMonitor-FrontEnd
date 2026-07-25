@@ -1,6 +1,7 @@
 // types/index.ts
 
 export type { Agent, AgentRole, AgentStatus } from './agent'
+export type { MemoryChangeType, MemoryItem, MemoryScope, MemorySnapshot, MemorySnapshotSummary } from './memory'
 export type {
   Task,
   TaskStatus,
