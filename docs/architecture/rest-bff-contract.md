@@ -1,22 +1,24 @@
 # REST BFF 接口契约
 
-> RiskMonitor-FrontEnd 与 RiskMonitor-MultiAgent 在 MVP 阶段使用的浏览器友好型接口契约. 本文档约束最小 demo 闭环的请求, 响应和状态映射.
+> RiskAgent-FrontEnd 与 RiskAgent-BackEnd 在 MVP 阶段使用的浏览器友好型接口契约. 本文档约束最小 demo 闭环的请求, 响应和状态映射.
 
 ## 目标
 
 - 为 FrontEnd 提供稳定的浏览器接口
-- 隔离 MultiAgent 内部 MCP 协议和工作流复杂度
+- 隔离 BackEnd 内部 MCP 协议和工作流复杂度
 - 支持 `提交任务 -> 轮询状态 -> 展示结果` 的最小闭环
 - 支持浏览器观察结构化 memory 视图而不直接访问 Redis
+- 支持浏览器观察真实执行的 TaskGraph DAG 与实时状态变化
 
 ## 协议原则
 
-- 协议风格采用 REST + JSON
-- MVP 阶段只使用轮询, 不要求 SSE
+- 协议风格采用 REST + JSON + SSE
+- 智能体状态和记忆默认通过 SSE 实时推送, 轮询只用于降级兜底
 - 所有业务接口统一挂在 `/api/*`
 - 时间字段统一使用 Unix 毫秒时间戳
 - 未落地的字段不在接口中承诺
 - memory 数据必须经过后端脱敏和结构化整理
+- TaskGraph 节点和边必须经过浏览器友好映射, 不直接暴露内部复杂对象引用
 
 ## 部署关系
 
@@ -24,7 +26,7 @@
 graph TB
     U[浏览器] --> I[Ingress 或同源代理]
     I -->|/| F[FrontEnd]
-    I -->|/api| B[MultiAgent REST BFF]
+    I -->|/api| B[BackEnd REST BFF]
 ```
 
 ## 1. 创建任务
@@ -140,6 +142,77 @@ graph TB
   "message": "llm request failed"
 }
 ```
+
+## 2.1 查询任务图快照
+
+### 请求
+
+- 方法: `GET`
+- 路径: `/api/tasks/{task_id}/graph`
+
+### 成功响应
+
+```json
+{
+  "task_id": "run_123456",
+  "session_id": "session_123456",
+  "status": "running",
+  "schema_version": "task_graph.v1",
+  "nodes": [
+    {
+      "id": "step_1",
+      "label": "delegate system_engineer",
+      "kind": "delegate",
+      "status": "completed",
+      "targetAgent": "system_engineer",
+      "reason": "先拉取风险暴露明细",
+      "startedAt": 1784803201000,
+      "finishedAt": 1784803203000,
+      "durationMs": 2000,
+      "data": {
+        "step_id": "step_1",
+        "kind": "delegate",
+        "target_agent": "system_engineer"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "step_1__step_2",
+      "source": "step_1",
+      "target": "step_2",
+      "status": "running",
+      "condition": "always",
+      "data": {
+        "from_step_id": "step_1",
+        "to_step_id": "step_2",
+        "condition": "always"
+      }
+    }
+  ],
+  "summary": {
+    "nodeCount": 2,
+    "edgeCount": 1,
+    "completedCount": 1,
+    "runningCount": 1,
+    "failedCount": 0,
+    "blockedCount": 0
+  },
+  "updated_at": 1784803205000
+}
+```
+
+### 字段说明
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `task_id` | string | 任务 ID |
+| `status` | string | 任务聚合状态 |
+| `schema_version` | string | TaskGraph 契约版本 |
+| `nodes` | array | 浏览器友好的节点列表 |
+| `edges` | array | 浏览器友好的边列表 |
+| `summary` | object | 图级统计信息 |
+| `updated_at` | number | 最近更新时间 |
 
 ## 3. 查询智能体状态
 
@@ -267,6 +340,92 @@ graph TB
 }
 ```
 
+## 7. 实时事件流
+
+### 请求
+
+- 方法: `GET`
+- 路径: `/api/stream`
+- 协议: `text/event-stream`
+
+### 查询参数
+
+- `task_id`: 可选. 传入后优先推送该任务相关的记忆视图
+- `agents`: 可选. 默认 `1`
+- `memory`: 可选. 默认 `1`
+- `graph`: 可选. 默认 `1`
+
+### 事件类型
+
+#### `agent_snapshot`
+
+```json
+{
+  "type": "agent_snapshot",
+  "updated_at": 1784803205000,
+  "data": {
+    "items": [
+      {
+        "id": "orchestrator",
+        "role": "lead",
+        "name": "ProactiveOrchestratorAgent",
+        "status": "working",
+        "currentTaskId": "run_123456",
+        "capabilities": ["plan", "coordinate", "monitor"],
+        "lastActiveAt": 1784803205000
+      }
+    ],
+    "updated_at": 1784803205000
+  }
+}
+```
+
+#### `memory_snapshot`
+
+```json
+{
+  "type": "memory_snapshot",
+  "updated_at": 1784803205000,
+  "data": {
+    "task_id": "run_123456",
+    "session_id": "session_123456",
+    "items": [],
+    "summary": {
+      "sharedCount": 8,
+      "privateCount": 3,
+      "agentCount": 4
+    },
+    "updated_at": 1784803205000
+  }
+}
+```
+
+#### `graph_snapshot`
+
+```json
+{
+  "type": "graph_snapshot",
+  "updated_at": 1784803205000,
+  "data": {
+    "task_id": "run_123456",
+    "status": "running",
+    "schema_version": "task_graph.v1",
+    "nodes": [],
+    "edges": [],
+    "updated_at": 1784803205000
+  }
+}
+```
+
+#### `heartbeat`
+
+```json
+{
+  "type": "heartbeat",
+  "ts": 1784803205000
+}
+```
+
 ### memory 字段说明
 
 | 字段 | 类型 | 说明 |
@@ -306,6 +465,18 @@ graph TB
 | `lesson` `semantic_case` | `compressed` |
 | 其他 | `created` |
 
+### TaskGraph 状态映射
+
+| 后端图状态 | 前端图状态 |
+|------------|------------|
+| `pending` | `pending` |
+| `ready` | `ready` |
+| `running` | `running` |
+| `completed` | `completed` |
+| `failed` | `failed` |
+| `blocked` | `blocked` |
+| `skipped` | `skipped` |
+
 ### 后端智能体状态到前端智能体状态
 
 | 后端状态 | 前端 `AgentStatus` |
@@ -340,14 +511,14 @@ graph TB
 | 服务未就绪 | `503` | `SERVICE_NOT_READY` |
 | 内部异常 | `500` | `INTERNAL_ERROR` |
 
-## 轮询建议
+## 实时与降级建议
 
-- 前端提交任务后立即启动轮询
-- 轮询间隔建议为 2 秒
-- 当任务进入 `completed` `failed` `cancelled` 时停止轮询
-- 连续失败 3 次后给出错误提示, 由用户决定是否重试
-- memory 轮询间隔建议与任务轮询保持一致, 默认 2 秒
-- 当没有 active task 时, 页面可以轮询 `/api/memory` 获取最近记忆快照
+- 前端默认建立 `/api/stream` 长连接订阅智能体状态, 记忆变化和 TaskGraph 变化
+- SSE 断开后前端应自动重连
+- 当浏览器或网络环境不支持 SSE 时, 前端可退化为原有轮询逻辑
+- 降级轮询间隔建议为 2 秒
+- 当没有 active task 时, 页面订阅全局 memory 快照
+- 当有 active task 时, 页面优先订阅任务维度的 memory 快照和 graph 快照
 
 ## 鉴权约束
 
@@ -358,8 +529,8 @@ graph TB
 ## 文档边界
 
 - 本文档只约束浏览器调用协议
-- MultiAgent 内部 MCP, workflow, trace, memory 结构不在本文档承诺范围内
-- SSE 协议如后续落地, 需要新增独立契约文档
+- BackEnd 内部 MCP, workflow, trace, memory 结构不在本文档承诺范围内
+- 前端任务详情轮询与表单提交仍保留在本文档约束范围内
 
 ## 相关文档
 

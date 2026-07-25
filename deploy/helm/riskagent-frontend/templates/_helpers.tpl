@@ -1,8 +1,8 @@
-{{- define "riskmonitor-frontend.name" -}}
+{{- define "riskagent-frontend.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "riskmonitor-frontend.fullname" -}}
+{{- define "riskagent-frontend.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -11,14 +11,14 @@
 {{- end -}}
 {{- end -}}
 
-{{- define "riskmonitor-frontend.labels" -}}
-app.kubernetes.io/name: {{ include "riskmonitor-frontend.name" . }}
+{{- define "riskagent-frontend.labels" -}}
+app.kubernetes.io/name: {{ include "riskagent-frontend.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 {{- end -}}
 
-{{- define "riskmonitor-frontend.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "riskmonitor-frontend.name" . }}
+{{- define "riskagent-frontend.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "riskagent-frontend.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}

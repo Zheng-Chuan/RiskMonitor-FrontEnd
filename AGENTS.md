@@ -4,7 +4,7 @@
 
 ## 项目概览
 
-RiskMonitor-FrontEnd 是一个纯前端 MultiAgent 多智能体协作平台，技术栈为 React 19 + TypeScript 6 + Vite 8 + Oxlint。项目不包含任何后端功能，通过 SSE 与外部 AI 服务通信，实现类似 Qoder 专家团的多智能体协作体验。
+RiskAgent-FrontEnd 是一个纯前端 BackEnd 多智能体协作平台，技术栈为 React 19 + TypeScript 6 + Vite 8 + Oxlint。项目不包含任何后端功能，通过 SSE 与外部 AI 服务通信，实现类似 Qoder 专家团的多智能体协作体验。
 
 ## 常用命令
 
@@ -48,7 +48,7 @@ RiskMonitor-FrontEnd 是一个纯前端 MultiAgent 多智能体协作平台，�
 - **React**：函数组件 + Hooks，严格遵守 Hooks 规则，组件拆分遵循单一职责原则
 - **CSS**：使用 CSS Module（`.module.css`），类名 camelCase
 
-## MultiAgent 专家团角色定义
+## BackEnd 专家团角色定义
 
 本项目模拟以下多智能体角色，前端需为每个角色提供独立的状态空间和 UI 呈现：
 

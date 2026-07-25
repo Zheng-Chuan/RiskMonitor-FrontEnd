@@ -1,6 +1,6 @@
 # 测试规范
 
-> RiskMonitor-FrontEnd 测试策略与规范文档。本文定义了测试分层、工具选型、文件组织和编写标准。
+> RiskAgent-FrontEnd 测试策略与规范文档。本文定义了测试分层、工具选型、文件组织和编写标准。
 
 ## 测试策略
 
@@ -66,7 +66,7 @@ export default defineConfig({
 
 - **用途**：端到端测试
 - **选择理由**：跨浏览器支持，API 现代化，自动等待
-- **当前要求**：涉及 FrontEnd 与 MultiAgent 的联调场景时 优先使用真实页面测试 不依赖人工点击验收 不允许 mock 后端
+- **当前要求**：涉及 FrontEnd 与 BackEnd 的联调场景时 优先使用真实页面测试 不依赖人工点击验收 不允许 mock 后端
 
 ## 测试文件组织规范
 
@@ -101,9 +101,9 @@ tests/
 │   ├── workspace.real.spec.ts         # 工作台真实页面联调
 │   └── chat-flow.spec.ts              # 对话流程 E2E
 ├── integration/
-│   └── rest-bff.real.test.ts          # FrontEnd 到 MultiAgent 的真实 REST 联调
+│   └── rest-bff.real.test.ts          # FrontEnd 到 BackEnd 的真实 REST 联调
 └── unit/
-    ├── riskmonitor-api.test.ts        # API 适配层映射测试
+    ├── riskagent-api.test.ts        # API 适配层映射测试
     ├── stores.test.ts                 # Zustand Store 测试
     └── workspace-presenters.test.ts   # 展示层工具函数测试
 ```
@@ -237,7 +237,7 @@ npm run test:unit
 # 运行真实 REST 联调测试
 VITE_API_BASE_URL=http://127.0.0.1:18080 npm run test:integration:rest
 
-# 自动拉起 MultiAgent 执行真实 REST 联调
+# 自动拉起 BackEnd 执行真实 REST 联调
 npm run test:integration:rest:local
 
 # 运行测试并生成覆盖率报告
@@ -249,7 +249,7 @@ npx vitest watch
 # 运行 E2E 测试
 npx playwright test
 
-# 自动拉起 FrontEnd 和 MultiAgent 执行真实页面联调
+# 自动拉起 FrontEnd 和 BackEnd 执行真实页面联调
 npm run test:e2e:workspace
 
 # 查看 E2E 测试报告

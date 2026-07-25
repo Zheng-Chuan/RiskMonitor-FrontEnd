@@ -1,74 +1,286 @@
-.canvasCard {
-  min-height: 100%;
+.canvasRoot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
 }
 
-.canvasHint {
-  color: var(--color-text-muted);
+.canvasMetaRow,
+.canvasSummary,
+.hoverHeader,
+.hoverMetaGrid {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.canvasMetaRow {
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.canvasSummary {
+  flex-wrap: wrap;
+}
+
+.canvasSummary span,
+.canvasUpdatedAt {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 999px;
+  color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
+  background: #ffffff;
 }
 
 .canvasFrame {
   height: 560px;
   overflow: hidden;
-  border: 1px solid rgba(14, 165, 233, 0.14);
+  border: 1px solid rgba(203, 213, 225, 0.9);
   border-radius: var(--radius-xl);
-  background:
-    radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 28%),
-    rgba(239, 246, 255, 0.92);
+  background: #ffffff;
 }
 
-.nodeCard {
-  width: 220px;
-  padding: 16px;
-  border: 1px solid rgba(14, 165, 233, 0.24);
-  border-radius: 20px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(241, 245, 249, 0.96)),
-    rgba(248, 250, 252, 0.96);
-  box-shadow:
-    0 10px 30px rgba(148, 163, 184, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+.canvasFrame :global(.react-flow__renderer),
+.canvasFrame :global(.react-flow__pane),
+.canvasFrame :global(.react-flow__background) {
+  background: #ffffff;
 }
 
-.nodeHeader {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.nodeRole {
-  display: block;
-  color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.nodeTitle {
-  display: block;
-  margin-top: 6px;
-  color: var(--color-text-heading);
-  font-size: var(--font-size-base);
-}
-
-.nodeSubtitle {
-  margin-top: 12px;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-}
-
-.miniMap {
-  background: rgba(255, 255, 255, 0.96);
+.canvasFrame :global(.react-flow__attribution) {
+  display: none;
 }
 
 .controls {
   background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(203, 213, 225, 0.92);
   border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(148, 163, 184, 0.12);
+}
+
+.nodeWrapper {
+  width: 224px;
+}
+
+.nodeCard {
+  padding: 14px 16px;
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 14px 32px rgba(148, 163, 184, 0.14);
+}
+
+.nodeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.nodeKind,
+.nodeStatus {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+}
+
+.nodeKind {
+  border: 1px solid rgba(203, 213, 225, 0.92);
+  color: #475569;
+  background: #f8fafc;
+  text-transform: uppercase;
+}
+
+.nodeStatus {
+  color: #0f172a;
+  background: #f8fafc;
+}
+
+.nodeTitle {
+  display: block;
+  margin-top: 12px;
+  color: var(--color-text-heading);
+  font-size: var(--font-size-base);
+  line-height: 1.35;
+}
+
+.nodeMeta {
+  margin: 8px 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.handle {
+  width: 10px;
+  height: 10px;
+  border: 2px solid #ffffff;
+  background: #94a3b8;
+}
+
+.hoverPanel,
+.emptyGraph {
+  padding: var(--spacing-md);
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  border-radius: calc(var(--radius-lg) + 4px);
+  background: #ffffff;
+}
+
+.hoverPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.emptyGraph,
+.hoverHint {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.emptyGraph p,
+.hoverHint p,
+.hoverReason {
+  margin: 0;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+
+.hoverHeader {
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.hoverMetaGrid {
+  flex-wrap: wrap;
+}
+
+.hoverMetaGrid span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  background: #f8fafc;
+}
+
+.hoverStatus {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+}
+
+.hoverCode {
+  margin: 0;
+  padding: 14px;
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  color: #0f172a;
+  font-size: 12px;
+  line-height: 1.6;
+  background: #f8fafc;
+}
+
+.statusPending {
+  border-color: rgba(203, 213, 225, 0.92);
+}
+
+.statusPending .nodeStatus,
+.statusPending.hoverStatus {
+  color: #475569;
+  background: rgba(226, 232, 240, 0.72);
+}
+
+.statusReady {
+  border-color: rgba(129, 140, 248, 0.4);
+  box-shadow: 0 14px 32px rgba(129, 140, 248, 0.14);
+}
+
+.statusReady .nodeStatus,
+.statusReady.hoverStatus {
+  color: #4338ca;
+  background: rgba(224, 231, 255, 0.9);
+}
+
+.statusRunning {
+  border-color: rgba(56, 189, 248, 0.48);
+  box-shadow: 0 16px 34px rgba(56, 189, 248, 0.18);
+}
+
+.statusRunning .nodeStatus,
+.statusRunning.hoverStatus {
+  color: #0369a1;
+  background: rgba(224, 242, 254, 0.96);
+}
+
+.statusCompleted {
+  border-color: rgba(16, 185, 129, 0.42);
+  box-shadow: 0 16px 34px rgba(16, 185, 129, 0.16);
+}
+
+.statusCompleted .nodeStatus,
+.statusCompleted.hoverStatus {
+  color: #047857;
+  background: rgba(209, 250, 229, 0.92);
+}
+
+.statusFailed {
+  border-color: rgba(239, 68, 68, 0.44);
+  box-shadow: 0 16px 34px rgba(239, 68, 68, 0.14);
+}
+
+.statusFailed .nodeStatus,
+.statusFailed.hoverStatus {
+  color: #b91c1c;
+  background: rgba(254, 226, 226, 0.96);
+}
+
+.statusBlocked {
+  border-color: rgba(245, 158, 11, 0.44);
+  box-shadow: 0 16px 34px rgba(245, 158, 11, 0.14);
+}
+
+.statusBlocked .nodeStatus,
+.statusBlocked.hoverStatus {
+  color: #b45309;
+  background: rgba(254, 243, 199, 0.96);
+}
+
+.statusSkipped {
+  border-color: rgba(148, 163, 184, 0.58);
+}
+
+.statusSkipped .nodeStatus,
+.statusSkipped.hoverStatus {
+  color: #64748b;
+  background: rgba(241, 245, 249, 0.96);
+}
+
+@media (max-width: 1040px) {
+  .canvasFrame {
+    height: 460px;
+  }
 }
 
 @media (max-width: 768px) {
   .canvasFrame {
     height: 420px;
+  }
+
+  .nodeWrapper {
+    width: 208px;
   }
 }

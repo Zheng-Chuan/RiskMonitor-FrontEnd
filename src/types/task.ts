@@ -43,6 +43,63 @@ export interface TaskStep {
   status: TaskStatus
 }
 
+/** TaskGraph 状态 */
+export type TaskGraphStatus =
+  | 'pending'
+  | 'ready'
+  | 'running'
+  | 'completed'
+  | 'failed'
+  | 'blocked'
+  | 'skipped'
+
+/** TaskGraph 节点 */
+export interface TaskGraphNode {
+  id: string
+  label: string
+  kind: string
+  status: TaskGraphStatus
+  parentId?: string
+  targetAgent?: string
+  toolName?: string
+  reason?: string
+  instruction?: string
+  condition?: string
+  startedAt?: number
+  finishedAt?: number
+  durationMs?: number
+  data: Record<string, unknown>
+}
+
+/** TaskGraph 边 */
+export interface TaskGraphEdge {
+  id: string
+  source: string
+  target: string
+  status: TaskGraphStatus
+  condition?: string
+  data: Record<string, unknown>
+}
+
+/** TaskGraph 快照 */
+export interface TaskGraphSnapshot {
+  taskId: string
+  sessionId?: string
+  status: string
+  schemaVersion: string
+  nodes: TaskGraphNode[]
+  edges: TaskGraphEdge[]
+  summary?: {
+    nodeCount: number
+    edgeCount: number
+    completedCount: number
+    runningCount: number
+    failedCount: number
+    blockedCount: number
+  }
+  updatedAt: number
+}
+
 /** Task 任务 */
 export interface Task {
   id: string
@@ -62,4 +119,5 @@ export interface Task {
   errorMessage?: string
   resultSummary?: string
   steps?: TaskStep[]
+  graph?: TaskGraphSnapshot
 }

@@ -1,6 +1,6 @@
 # 环境搭建指南
 
-> RiskMonitor-FrontEnd 开发环境搭建的完整指南。按照以下步骤即可完成本地开发环境配置。
+> RiskAgent-FrontEnd 开发环境搭建的完整指南。按照以下步骤即可完成本地开发环境配置。
 
 ## 前置要求
 
@@ -33,8 +33,8 @@ git --version     # 应输出 2.40.0 或更高
 ### 1. 克隆仓库
 
 ```bash
-git clone https://github.com/zhengchuan/RiskMonitor-FrontEnd.git
-cd RiskMonitor-FrontEnd
+git clone https://github.com/zhengchuan/RiskAgent-FrontEnd.git
+cd RiskAgent-FrontEnd
 ```
 
 ### 2. 安装依赖

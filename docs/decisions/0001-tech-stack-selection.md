@@ -10,7 +10,7 @@
 
 ## 上下文
 
-RiskMonitor-FrontEnd 是一个纯前端 MultiAgent 多智能体协作平台，需要支持以下复杂交互场景：
+RiskAgent-FrontEnd 是一个纯前端 BackEnd 多智能体协作平台，需要支持以下复杂交互场景：
 
 - 多个智能体角色的实时状态同步与可视化
 - 流式对话（逐 token 渲染）
@@ -53,7 +53,7 @@ RiskMonitor-FrontEnd 是一个纯前端 MultiAgent 多智能体协作平台，�
 
 ### TypeScript 6
 
-- 静态类型检查在 MultiAgent 场景下至关重要（多角色、多消息类型）
+- 静态类型检查在 BackEnd 场景下至关重要（多角色、多消息类型）
 - 6 版本带来更好的类型推断和性能
 - 与 Vite、Oxlint 深度集成
 
@@ -75,7 +75,7 @@ RiskMonitor-FrontEnd 是一个纯前端 MultiAgent 多智能体协作平台，�
 - 轻量（~1KB），API 简洁
 - 无 Provider 包裹，避免组件树嵌套
 - 细粒度选择器实现精准重渲染
-- 按领域拆分 Store 天然适合 MultiAgent 场景
+- 按领域拆分 Store 天然适合 BackEnd 场景
 - 相比 Redux 更简洁，相比 Context 更高效
 
 ### React Flow
@@ -91,7 +91,7 @@ RiskMonitor-FrontEnd 是一个纯前端 MultiAgent 多智能体协作平台，�
 
 - 技术栈各组件之间兼容性好，均为主流方案
 - 开发体验优秀（Vite HMR + Oxlint 速度 + TypeScript 类型安全）
-- Zustand + React Flow 组合在 MultiAgent 可视化场景下无替代方案
+- Zustand + React Flow 组合在 BackEnd 可视化场景下无替代方案
 - 社区活跃，文档完善，问题排查成本低
 
 ### 风险
@@ -110,4 +110,4 @@ RiskMonitor-FrontEnd 是一个纯前端 MultiAgent 多智能体协作平台，�
 
 ## 相关 ADR
 
-- [ADR-0002: MultiAgent 前端架构](0002-multiagent-frontend-architecture.md) — 基于本技术栈的架构设计决策
+- [ADR-0002: BackEnd 前端架构](0002-backend-frontend-architecture.md) — 基于本技术栈的架构设计决策

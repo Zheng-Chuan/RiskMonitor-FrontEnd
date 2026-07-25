@@ -1,6 +1,6 @@
-# RiskMonitor-FrontEnd
+# RiskAgent-FrontEnd
 
-> 一个纯前端 MultiAgent（多智能体）协作平台，灵感来自 Qoder 专家团模式，实现多智能体任务编排、实时对话流与可视化协作画布。
+> 一个纯前端 BackEnd（多智能体）协作平台，灵感来自 Qoder 专家团模式，实现多智能体任务编排、实时对话流与可视化协作画布。
 
 ## 核心特性
 
@@ -66,7 +66,7 @@ graph TB
 ```bash
 # 克隆仓库
 git clone <repository-url>
-cd RiskMonitor-FrontEnd
+cd RiskAgent-FrontEnd
 
 # 安装依赖
 npm install
@@ -87,7 +87,7 @@ npm run lint
 ## 项目结构
 
 ```
-RiskMonitor-FrontEnd/
+RiskAgent-FrontEnd/
 ├── public/                  # 静态公共资源
 ├── src/
 │   ├── assets/              # 静态资源（图片、字体等）
@@ -127,7 +127,7 @@ RiskMonitor-FrontEnd/
 | 编码规范 | [docs/standards/coding-conventions.md](docs/standards/coding-conventions.md) | 代码风格与规范 |
 | 测试规范 | [docs/standards/testing.md](docs/standards/testing.md) | 测试策略与规范 |
 | 技术栈选型 | [docs/decisions/0001-tech-stack-selection.md](docs/decisions/0001-tech-stack-selection.md) | ADR: 技术栈决策 |
-| 前端架构决策 | [docs/decisions/0002-multiagent-frontend-architecture.md](docs/decisions/0002-multiagent-frontend-architecture.md) | ADR: MultiAgent 架构 |
+| 前端架构决策 | [docs/decisions/0002-backend-frontend-architecture.md](docs/decisions/0002-backend-frontend-architecture.md) | ADR: BackEnd 架构 |
 | AI 协作指南 | [AGENTS.md](AGENTS.md) | AI 编程助手协作说明 |
 | 贡献指南 | [CONTRIBUTING.md](CONTRIBUTING.md) | 参与贡献流程 |
 | 更新日志 | [CHANGELOG.md](CHANGELOG.md) | 版本更新记录 |

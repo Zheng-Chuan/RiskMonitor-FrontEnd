@@ -1,6 +1,6 @@
 # 部署指南
 
-> RiskMonitor-FrontEnd 当前采用双应用 K8s 部署路径. 前端和 MultiAgent 后端分别部署, 通过同一个 Ingress 对外暴露.
+> RiskAgent-FrontEnd 当前采用双应用 K8s 部署路径. 前端和 BackEnd 后端分别部署, 通过同一个 Ingress 对外暴露.
 
 ## 架构总览
 
@@ -8,15 +8,15 @@
 graph TB
     U[用户浏览器] --> I[Ingress]
     I -->|/| F[FrontEnd Deployment]
-    I -->|/api| B[MultiAgent Deployment]
+    I -->|/api| B[BackEnd Deployment]
     B --> M[(MySQL)]
     B --> R[(Redis)]
 ```
 
 ## 部署原则
 
-- FrontEnd 与 MultiAgent 保持独立镜像
-- FrontEnd 与 MultiAgent 保持独立 Deployment 和 Service
+- FrontEnd 与 BackEnd 保持独立镜像
+- FrontEnd 与 BackEnd 保持独立 Deployment 和 Service
 - 外部访问统一通过 Ingress
 - MVP 阶段使用 REST BFF + 轮询
 - 本地先完成联调, 再推进云端 K8s
@@ -26,7 +26,7 @@ graph TB
 ### 后端启动
 
 ```bash
-cd /Users/zhengchuan/Documents/TECH/Repo/RiskMonitor/RiskMonitor-MultiAgent
+cd /Users/zhengchuan/Documents/TECH/Repo/RiskAgent/RiskAgent-BackEnd
 cp .env.example .env
 docker compose up -d
 curl http://localhost:8000/health
@@ -35,7 +35,7 @@ curl http://localhost:8000/health
 ### 前端启动
 
 ```bash
-cd /Users/zhengchuan/Documents/TECH/Repo/RiskMonitor/RiskMonitor-FrontEnd
+cd /Users/zhengchuan/Documents/TECH/Repo/RiskAgent/RiskAgent-FrontEnd
 npm install
 npm run dev
 ```
@@ -95,30 +95,30 @@ server {
 ### 构建前端镜像
 
 ```bash
-cd /Users/zhengchuan/Documents/TECH/Repo/RiskMonitor/RiskMonitor-FrontEnd
-docker build -t <registry>/riskmonitor-frontend:<tag> .
-docker push <registry>/riskmonitor-frontend:<tag>
+cd /Users/zhengchuan/Documents/TECH/Repo/RiskAgent/RiskAgent-FrontEnd
+docker build -t <registry>/riskagent-frontend:<tag> .
+docker push <registry>/riskagent-frontend:<tag>
 ```
 
 ### 构建后端镜像
 
 ```bash
-cd /Users/zhengchuan/Documents/TECH/Repo/RiskMonitor/RiskMonitor-MultiAgent
-docker build -t <registry>/riskmonitor-multiagent:<tag> -f Dockerfile .
-docker push <registry>/riskmonitor-multiagent:<tag>
+cd /Users/zhengchuan/Documents/TECH/Repo/RiskAgent/RiskAgent-BackEnd
+docker build -t <registry>/riskagent-backend:<tag> -f Dockerfile .
+docker push <registry>/riskagent-backend:<tag>
 ```
 
 ## 后端部署
 
-后端继续复用 MultiAgent 已有 Helm Chart.
+后端继续复用 BackEnd 已有 Helm Chart.
 
 ```bash
-cd /Users/zhengchuan/Documents/TECH/Repo/RiskMonitor/RiskMonitor-MultiAgent
-helm upgrade --install riskmonitor deploy/k8s/ \
+cd /Users/zhengchuan/Documents/TECH/Repo/RiskAgent/RiskAgent-BackEnd
+helm upgrade --install riskagent deploy/k8s/ \
   -f deploy/k8s/values-prod.yaml \
-  --set image.repository=<registry>/riskmonitor-multiagent \
+  --set image.repository=<registry>/riskagent-backend \
   --set image.tag=<tag> \
-  -n riskmonitor --create-namespace
+  -n riskagent --create-namespace
 ```
 
 ## 前端部署
@@ -129,21 +129,21 @@ helm upgrade --install riskmonitor deploy/k8s/ \
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: riskmonitor-frontend
-  namespace: riskmonitor
+  name: riskagent-frontend
+  namespace: riskagent
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: riskmonitor-frontend
+      app: riskagent-frontend
   template:
     metadata:
       labels:
-        app: riskmonitor-frontend
+        app: riskagent-frontend
     spec:
       containers:
         - name: frontend
-          image: <registry>/riskmonitor-frontend:<tag>
+          image: <registry>/riskagent-frontend:<tag>
           ports:
             - containerPort: 80
           resources:
@@ -161,11 +161,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: riskmonitor-frontend
-  namespace: riskmonitor
+  name: riskagent-frontend
+  namespace: riskagent
 spec:
   selector:
-    app: riskmonitor-frontend
+    app: riskagent-frontend
   ports:
     - port: 80
       targetPort: 80
@@ -177,8 +177,8 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: riskmonitor
-  namespace: riskmonitor
+  name: riskagent
+  namespace: riskagent
 spec:
   ingressClassName: nginx
   rules:
@@ -189,7 +189,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: riskmonitor-frontend
+                name: riskagent-frontend
                 port:
                   number: 80
           - path: /api
@@ -221,9 +221,9 @@ kubectl apply -f deploy/k8s/ingress.yaml
 ### 基础健康检查
 
 ```bash
-kubectl get pods -n riskmonitor
-kubectl get svc -n riskmonitor
-kubectl get ingress -n riskmonitor
+kubectl get pods -n riskagent
+kubectl get svc -n riskagent
+kubectl get ingress -n riskagent
 ```
 
 ### 接口验证
@@ -246,21 +246,21 @@ curl http://<your-domain-or-ip>/api/agents
 ### 更新前端
 
 ```bash
-docker build -t <registry>/riskmonitor-frontend:<new-tag> .
-docker push <registry>/riskmonitor-frontend:<new-tag>
-kubectl set image deployment/riskmonitor-frontend \
-  frontend=<registry>/riskmonitor-frontend:<new-tag> \
-  -n riskmonitor
+docker build -t <registry>/riskagent-frontend:<new-tag> .
+docker push <registry>/riskagent-frontend:<new-tag>
+kubectl set image deployment/riskagent-frontend \
+  frontend=<registry>/riskagent-frontend:<new-tag> \
+  -n riskagent
 ```
 
 ### 更新后端
 
 ```bash
-helm upgrade --install riskmonitor deploy/k8s/ \
+helm upgrade --install riskagent deploy/k8s/ \
   -f deploy/k8s/values-prod.yaml \
-  --set image.repository=<registry>/riskmonitor-multiagent \
+  --set image.repository=<registry>/riskagent-backend \
   --set image.tag=<new-tag> \
-  -n riskmonitor
+  -n riskagent
 ```
 
 ## 当前已知限制

@@ -10,7 +10,7 @@
 
 ## 上下文
 
-RiskMonitor-FrontEnd 需要部署到云厂商，与后端 RiskMonitor-MultiAgent 打通并提供公网访问。部署方案需满足以下约束：
+RiskAgent-FrontEnd 需要部署到云厂商，与后端 RiskAgent-BackEnd 打通并提供公网访问。部署方案需满足以下约束：
 
 1. **支付便利**：支持支付宝付款
 2. **中国访问**：中国用户可直接访问，无需翻墙
@@ -94,4 +94,4 @@ RiskMonitor-FrontEnd 需要部署到云厂商，与后端 RiskMonitor-MultiAgent
 ## 相关 ADR
 
 - [ADR-0001: 技术栈选型](0001-tech-stack-selection.md) — 前端技术栈选型决策
-- [ADR-0002: MultiAgent 前端架构](0002-multiagent-frontend-architecture.md) — 前端架构设计决策
+- [ADR-0002: BackEnd 前端架构](0002-backend-frontend-architecture.md) — 前端架构设计决策

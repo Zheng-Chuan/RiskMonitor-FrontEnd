@@ -12,8 +12,8 @@
 
 当前仓库包含两个独立应用:
 
-- `RiskMonitor-FrontEnd` — React + Vite + TypeScript 前端
-- `RiskMonitor-MultiAgent` — Python + FastMCP 多智能体后端
+- `RiskAgent-FrontEnd` — React + Vite + TypeScript 前端
+- `RiskAgent-BackEnd` — Python + FastMCP 多智能体后端
 
 当前面临的核心选择是:
 
@@ -93,7 +93,7 @@
 graph TB
     U[用户浏览器] --> I[Ingress]
     I -->|/| F[FrontEnd Deployment]
-    I -->|/api| B[MultiAgent Deployment]
+    I -->|/api| B[BackEnd Deployment]
     B --> M[(MySQL)]
     B --> R[(Redis)]
 ```
@@ -106,12 +106,12 @@ graph TB
 
 ## 实施约束
 
-- FrontEnd 不合并进 MultiAgent 代码目录
+- FrontEnd 不合并进 BackEnd 代码目录
 - FrontEnd 不直接实现 MCP 协议
 - MVP 阶段不要求 SSE, React Flow 和高可用
 
 ## 相关 ADR
 
 - [ADR-0001: 技术栈选型](0001-tech-stack-selection.md)
-- [ADR-0002: MultiAgent 前端架构](0002-multiagent-frontend-architecture.md)
+- [ADR-0002: BackEnd 前端架构](0002-backend-frontend-architecture.md)
 - [ADR-0003: 火山引擎部署决策](0003-volcengine-deployment.md)

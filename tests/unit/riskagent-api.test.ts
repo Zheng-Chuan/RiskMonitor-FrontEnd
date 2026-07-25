@@ -1,7 +1,7 @@
 import { httpClient } from '@/api/http-client'
-import { createDraftTask, getMemory, getTaskMemory, mapTaskDetail } from '@/api/riskmonitor-api'
+import { createDraftTask, getMemory, getTaskGraph, getTaskMemory, mapTaskDetail } from '@/api/riskagent-api'
 
-describe('riskmonitor-api mappings', () => {
+describe('riskagent-api mappings', () => {
   afterEach(() => {
     vi.restoreAllMocks()
   })
@@ -90,6 +90,68 @@ describe('riskmonitor-api mappings', () => {
     expect(mapped.completedAt).toBe(1_724_800_002_000)
     expect(mapped.artifacts).toEqual([])
     expect(mapped.steps).toEqual([])
+  })
+
+  it('maps task graph snapshot into frontend graph model', async () => {
+    vi.spyOn(httpClient, 'get').mockResolvedValueOnce({
+      task_id: 'task_graph_1',
+      session_id: 'session_graph_1',
+      status: 'running',
+      schema_version: 'task_graph.v1',
+      nodes: [
+        {
+          id: 'step_1',
+          label: 'delegate system_engineer',
+          kind: 'delegate',
+          status: 'running',
+          targetAgent: 'system_engineer',
+          reason: '先拉取风险暴露',
+          data: {
+            step_id: 'step_1',
+            kind: 'delegate',
+          },
+        },
+      ],
+      edges: [
+        {
+          id: 'step_1__step_2',
+          source: 'step_1',
+          target: 'step_2',
+          status: 'ready',
+          condition: 'always',
+          data: {
+            from_step_id: 'step_1',
+            to_step_id: 'step_2',
+          },
+        },
+      ],
+      summary: {
+        nodeCount: 1,
+        edgeCount: 1,
+        completedCount: 0,
+        runningCount: 1,
+        failedCount: 0,
+        blockedCount: 0,
+      },
+      updated_at: 1_724_800_004_500,
+    })
+
+    const graph = await getTaskGraph('task_graph_1')
+
+    expect(graph.taskId).toBe('task_graph_1')
+    expect(graph.sessionId).toBe('session_graph_1')
+    expect(graph.nodes[0]).toMatchObject({
+      id: 'step_1',
+      label: 'delegate system_engineer',
+      status: 'running',
+      targetAgent: 'system_engineer',
+    })
+    expect(graph.edges[0]).toMatchObject({
+      id: 'step_1__step_2',
+      source: 'step_1',
+      target: 'step_2',
+      status: 'ready',
+    })
   })
 
   it('maps global memory snapshot into frontend memory model', async () => {

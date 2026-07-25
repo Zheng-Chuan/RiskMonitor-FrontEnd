@@ -1,6 +1,6 @@
 # 贡献指南
 
-感谢您关注 RiskMonitor-FrontEnd 项目！本文档将指导您如何参与项目贡献。
+感谢您关注 RiskAgent-FrontEnd 项目！本文档将指导您如何参与项目贡献。
 
 ## 如何参与贡献
 
@@ -28,10 +28,10 @@
 ```bash
 # 1. 克隆仓库
 git clone <your-fork-url>
-cd RiskMonitor-FrontEnd
+cd RiskAgent-FrontEnd
 
 # 2. 添加上游仓库
-git remote add upstream https://github.com/zhengchuan/RiskMonitor-FrontEnd.git
+git remote add upstream https://github.com/zhengchuan/RiskAgent-FrontEnd.git
 
 # 3. 安装依赖
 npm install
@@ -63,7 +63,7 @@ npm run build
 
 ```bash
 # 功能分支
-git checkout -b feature/multiagent-canvas develop
+git checkout -b feature/backend-canvas develop
 
 # Bug 修复分支
 git checkout -b fix/sse-reconnect-error develop

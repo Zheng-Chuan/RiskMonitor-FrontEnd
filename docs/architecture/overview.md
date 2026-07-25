@@ -1,6 +1,6 @@
 # 架构概览
 
-> RiskMonitor-FrontEnd 系统总体架构设计文档。本文从全局视角描述前端各模块的关系与设计理念。
+> RiskAgent-FrontEnd 系统总体架构设计文档。本文从全局视角描述前端各模块的关系与设计理念。
 
 ## 系统总体架构
 
@@ -67,7 +67,7 @@ graph TB
 
 ## 核心概念
 
-### MultiAgent 专家团
+### BackEnd 专家团
 
 专家团是本项目的核心协作模型，由 Lead Agent 统一调度多个专家角色完成复杂任务：
 
@@ -105,6 +105,6 @@ Lead Agent 将用户请求分解为子任务，按依赖关系编排执行顺序
 | 决策 | ADR | 状态 |
 |------|-----|------|
 | React 19 + Vite 8 + TypeScript 6 技术栈 | [0001-tech-stack-selection](../decisions/0001-tech-stack-selection.md) | Accepted |
-| Zustand + React Flow + SSE + XState 架构 | [0002-multiagent-frontend-architecture](../decisions/0002-multiagent-frontend-architecture.md) | Accepted |
+| Zustand + React Flow + SSE + XState 架构 | [0002-backend-frontend-architecture](../decisions/0002-backend-frontend-architecture.md) | Accepted |
 
 前端模块的详细设计见 [前端架构详解](frontend.md)，核心数据类型定义见 [数据模型](data-model.md)。

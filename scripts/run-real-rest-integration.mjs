@@ -8,14 +8,14 @@ import { loadLocalEnvFiles } from './load-local-env.mjs'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const frontendRoot = path.resolve(__dirname, '..')
-const backendRoot = process.env.RISKMONITOR_BACKEND_ROOT
-  ? path.resolve(process.env.RISKMONITOR_BACKEND_ROOT)
-  : path.resolve(frontendRoot, '../RiskMonitor-MultiAgent')
-const backendPort = process.env.RISKMONITOR_BACKEND_PORT ?? '18080'
-const backendHost = process.env.RISKMONITOR_BACKEND_HOST ?? '127.0.0.1'
+const backendRoot = process.env.RISKAGENT_BACKEND_ROOT
+  ? path.resolve(process.env.RISKAGENT_BACKEND_ROOT)
+  : path.resolve(frontendRoot, '../RiskAgent-BackEnd')
+const backendPort = process.env.RISKAGENT_BACKEND_PORT ?? '18080'
+const backendHost = process.env.RISKAGENT_BACKEND_HOST ?? '127.0.0.1'
 const backendBaseUrl = process.env.VITE_API_BASE_URL ?? `http://${backendHost}:${backendPort}`
-const backendEntry = process.env.RISKMONITOR_BACKEND_ENTRY ?? 'main.py'
-const backendPython = process.env.RISKMONITOR_BACKEND_PYTHON ?? '/Users/zhengchuan/anaconda3/envs/MCP/bin/python'
+const backendEntry = process.env.RISKAGENT_BACKEND_ENTRY ?? 'main.py'
+const backendPython = process.env.RISKAGENT_BACKEND_PYTHON ?? '/Users/zhengchuan/anaconda3/envs/MCP/bin/python'
 const healthUrl = `${backendBaseUrl}/health`
 
 loadLocalEnvFiles([

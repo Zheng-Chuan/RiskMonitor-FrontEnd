@@ -48,8 +48,8 @@
   - [docs/standards/coding-conventions.md](docs/standards/coding-conventions.md) — 编码规范
   - [docs/standards/testing.md](docs/standards/testing.md) — 测试规范
   - [docs/decisions/0001-tech-stack-selection.md](docs/decisions/0001-tech-stack-selection.md) — ADR: 技术栈选型
-  - [docs/decisions/0002-multiagent-frontend-architecture.md](docs/decisions/0002-multiagent-frontend-architecture.md) — ADR: MultiAgent 前端架构
-- 定义 MultiAgent 专家团角色模型（Lead、Researcher、Engineer、QA、Reviewer、UI Operator）
+  - [docs/decisions/0002-backend-frontend-architecture.md](docs/decisions/0002-backend-frontend-architecture.md) — ADR: BackEnd 前端架构
+- 定义 BackEnd 专家团角色模型（Lead、Researcher、Engineer、QA、Reviewer、UI Operator）
 - 定义任务状态枚举（pending、in_progress、completed、failed、cancelled）
 - 定义 SSE 消息类型规范（agent_status、token_stream、task_update、artifact、error）
 - 定义核心数据类型（Agent、Task、Message、Artifact）
@@ -58,5 +58,5 @@
 
 <!-- 链接区域 -->
 
-[Unreleased]: https://github.com/zhengchuan/RiskMonitor-FrontEnd/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/zhengchuan/RiskMonitor-FrontEnd/releases/tag/v0.1.0
+[Unreleased]: https://github.com/zhengchuan/RiskAgent-FrontEnd/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/zhengchuan/RiskAgent-FrontEnd/releases/tag/v0.1.0

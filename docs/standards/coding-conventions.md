@@ -1,6 +1,6 @@
 # 编码规范
 
-> RiskMonitor-FrontEnd 项目的代码风格与编码规范。所有贡献者须遵循本规范。
+> RiskAgent-FrontEnd 项目的代码风格与编码规范。所有贡献者须遵循本规范。
 
 ## 命名规范
 

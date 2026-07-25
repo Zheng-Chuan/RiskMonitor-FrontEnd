@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "riskmonitor-frontend.fullname" . }}
+  name: {{ include "riskagent-frontend.fullname" . }}
   labels:
-    {{- include "riskmonitor-frontend.labels" . | nindent 4 }}
+    {{- include "riskagent-frontend.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "riskmonitor-frontend.selectorLabels" . | nindent 6 }}
+      {{- include "riskagent-frontend.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "riskmonitor-frontend.selectorLabels" . | nindent 8 }}
+        {{- include "riskagent-frontend.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - name: frontend
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: RISKMONITOR_API_UPSTREAM
+            - name: RISKAGENT_API_UPSTREAM
               value: {{ .Values.api.upstream | quote }}
           ports:
             - name: http

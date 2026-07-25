@@ -1,6 +1,6 @@
 # 开发流程指南
 
-> RiskMonitor-FrontEnd 日常开发工作流指南，涵盖从分支创建到代码提交的完整流程。
+> RiskAgent-FrontEnd 日常开发工作流指南，涵盖从分支创建到代码提交的完整流程。
 
 ## 开发工作流
 
@@ -98,7 +98,7 @@ const debugSSE = (message: SSEMessage) => {
     {
       "type": "chrome",
       "request": "launch",
-      "name": "Debug RiskMonitor",
+      "name": "Debug RiskAgent",
       "url": "http://localhost:5173",
       "webRoot": "${workspaceFolder}/src"
     }

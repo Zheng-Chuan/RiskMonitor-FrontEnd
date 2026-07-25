@@ -66,12 +66,6 @@ export interface WorkspaceKpi {
   hint: string
 }
 
-export interface HomeFeature {
-  id: string
-  title: string
-  description: string
-}
-
 export interface SettingItem {
   id: string
   label: string

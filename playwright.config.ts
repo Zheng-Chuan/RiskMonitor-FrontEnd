@@ -1,12 +1,12 @@
 import { defineConfig } from '@playwright/test'
 
-const backendHost = process.env.RISKMONITOR_BACKEND_HOST ?? '127.0.0.1'
-const backendPort = process.env.RISKMONITOR_BACKEND_PORT ?? '18080'
+const backendHost = process.env.RISKAGENT_BACKEND_HOST ?? '127.0.0.1'
+const backendPort = process.env.RISKAGENT_BACKEND_PORT ?? '18080'
 const frontendPort = process.env.PLAYWRIGHT_FRONTEND_PORT ?? '4173'
 const useExternalBaseUrl = process.env.PLAYWRIGHT_USE_EXTERNAL_BASE_URL === '1'
-const backendPython = process.env.RISKMONITOR_BACKEND_PYTHON ?? '/Users/zhengchuan/anaconda3/envs/MCP/bin/python'
-const backendRoot = process.env.RISKMONITOR_BACKEND_ROOT ?? '../RiskMonitor-MultiAgent'
-const backendEntry = process.env.RISKMONITOR_BACKEND_ENTRY ?? 'main.py'
+const backendPython = process.env.RISKAGENT_BACKEND_PYTHON ?? '/Users/zhengchuan/anaconda3/envs/MCP/bin/python'
+const backendRoot = process.env.RISKAGENT_BACKEND_ROOT ?? '../RiskAgent-BackEnd'
+const backendEntry = process.env.RISKAGENT_BACKEND_ENTRY ?? 'main.py'
 const backendBaseUrl = process.env.VITE_API_BASE_URL ?? `http://${backendHost}:${backendPort}`
 const frontendBaseUrl = process.env.PLAYWRIGHT_FRONTEND_BASE_URL ?? `http://127.0.0.1:${frontendPort}`
 

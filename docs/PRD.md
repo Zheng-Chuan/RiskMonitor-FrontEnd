@@ -1,8 +1,8 @@
-# RiskMonitor-FrontEnd PRD
+# RiskAgent-FrontEnd PRD
 
 ## 1. 文档目标
 
-本文档是 RiskMonitor-FrontEnd 的产品需求总纲. 它定义当前阶段的目标边界, 功能需求, 非功能需求和发布准入标准.
+本文档是 RiskAgent-FrontEnd 的产品需求总纲. 它定义当前阶段的目标边界, 功能需求, 非功能需求和发布准入标准.
 
 - 架构设计: [architecture/overview.md](./architecture/overview.md)
 - 技术决策: [decisions/](./decisions/)
@@ -11,11 +11,11 @@
 
 ## 2. 项目定位
 
-把 RiskMonitor-FrontEnd 从"多智能体前端骨架和文档原型"升级为"能与 RiskMonitor-MultiAgent 形成最小业务闭环的前端应用".
+把 RiskAgent-FrontEnd 从"多智能体前端骨架和文档原型"升级为"能与 RiskAgent-BackEnd 形成最小业务闭环的前端应用".
 
 当前阶段坚持两个约束:
 
-- FrontEnd 与 MultiAgent 保持双应用边界, 不合并为单一代码项目
+- FrontEnd 与 BackEnd 保持双应用边界, 不合并为单一代码项目
 - FrontEnd 在同一仓库内独立演进, 但和后端共享一套联调与部署闭环
 
 ### 2.1 成功标准
@@ -28,8 +28,7 @@
 
 ### 2.2 非目标
 
-- 本阶段不实现 React Flow 画布
-- 本阶段不实现 SSE 实时流式协议
+- 本阶段不实现人工编辑和拖拽编排能力
 - 本阶段不实现复杂权限系统
 - 本阶段不追求多环境高可用和自动扩缩容
 
@@ -46,28 +45,29 @@
 - 提交一条风控查询任务并查看执行进度
 - 查看当前智能体角色的状态快照
 - 在任务执行过程中观察系统内部记忆的变化
+- 在任务详情区域实时观察真正执行的 TaskGraph DAG
 - 在云端 K8s 环境访问一个可演示的最小前端页面
 
 ## 4. 架构约束
 
 - 系统保持独立前端应用形态, 不把 React 构建链并入 Python 服务
-- 前端只通过面向浏览器的 REST BFF 调用后端, 不直接实现 MCP 客户端
+- 前端只通过面向浏览器的 REST BFF 和 SSE 事件流调用后端, 不直接实现 MCP 客户端
 - 前端和后端分别作为独立 Deployment 运行, 由同一个 Ingress 对外暴露
-- MVP 先采用轮询协议, 后续再评估 SSE 升级
+- 智能体状态和记忆可观测性默认采用 SSE 实时推送, 轮询只作为降级兜底
 
 ## 5. 核心里程碑
 
 | 阶段 | 目标 | 状态 | 详情 |
 |------|------|------|------|
 | Phase 0 | 双应用最小闭环基础建设 | 规划中 | [phase-0-dual-app-foundation.md](./phases/phase-0-dual-app-foundation.md) |
-| Phase 1 | 浅色工作台与记忆可观测性 | 已规划, 待执行 | [phase-1-light-theme-and-memory-observability.md](./phases/phase-1-light-theme-and-memory-observability.md) |
+| Phase 1 | 浅色工作台与 TaskGraph 可观测性 | 开发中 | [phase-1-light-theme-and-memory-observability.md](./phases/phase-1-light-theme-and-memory-observability.md) |
 
 ## 6. 关键技术决策
 
 | 决策 | 状态 | 文档 |
 |------|------|------|
 | React 19 + Vite 8 + TypeScript 6 技术栈 | Accepted | [0001](./decisions/0001-tech-stack-selection.md) |
-| Zustand + React Flow + SSE + XState 前端架构 | Accepted | [0002](./decisions/0002-multiagent-frontend-architecture.md) |
+| Zustand + React Flow + SSE + XState 前端架构 | Accepted | [0002](./decisions/0002-backend-frontend-architecture.md) |
 | 火山引擎 ECS 一体化部署 | Accepted | [0003](./decisions/0003-volcengine-deployment.md) |
 | 双应用仓库与 K8s 部署策略 | Accepted | [0004](./decisions/0004-dual-app-repo-and-k8s-deployment.md) |
 
@@ -83,11 +83,21 @@
 | FR-6 | 前端必须支持 K8s 独立部署 | 构建产物可单独容器化并作为独立服务发布 |
 | FR-7 | 前端必须支持浅色工作台主题 | 默认界面以白色和浅色为主, 主色使用天蓝色 |
 | FR-8 | 前端必须支持浅色主题下的状态可读性 | 任务状态, 智能体状态, 错误提示和告警提示在浅色背景下保持可辨识 |
-| FR-9 | 前端必须新增记忆面板 | 页面中增加独立区域展示 MultiAgent 内部记忆内容 |
+| FR-9 | 前端必须新增记忆面板 | 页面中增加独立区域展示 BackEnd 内部记忆内容 |
 | FR-10 | 前端必须展示受控记忆视图 | 记忆面板展示后端整理后的字段, 不直接暴露 Redis 原始结构 |
 | FR-11 | 前端必须支持近实时记忆刷新 | 用户在任务执行期间能观察到记忆内容变化 |
 | FR-12 | 前端必须标记记忆条目的来源与时间 | 每条记忆至少能看到来源智能体和时间信息 |
 | FR-13 | 前端必须支持记忆与任务上下文关联 | 用户能看出记忆属于哪个任务, 会话或执行上下文 |
+| FR-14 | 前端必须支持智能体状态和记忆的实时动态刷新 | 后端状态变化后, 前端应尽快自动更新, 默认使用 SSE |
+| FR-15 | 前端必须移除首页模块并默认以工作台作为主入口 | `/` 直接进入工作台, 导航不再保留首页 |
+| FR-16 | 前端必须支持公共记忆与私有记忆分组浏览 | 记忆面板按 shared:memory 与 agent:{id}:memory 组织显示 |
+| FR-17 | 前端必须支持记忆面板整体收放与分组收放 | 用户可收起面板或展开查看完整详情 |
+| FR-18 | 前端视觉语言必须向 Instagram 风格靠拢 | 采用轻盈卡片, 强对比排版, 柔和渐变, 圆角与高质感留白 |
+| FR-19 | 前端必须展示真实执行的 TaskGraph DAG | 任务详情区域展示来自 BackEnd 的真实节点和边, 不再只展示线性步骤列表 |
+| FR-20 | 前端必须支持节点和边的悬停数据查看 | 鼠标悬停节点时展示节点数据, 悬停边时展示边数据和依赖条件 |
+| FR-21 | 前端必须支持 TaskGraph 的实时动态刷新 | 任务图默认通过 SSE 实时更新, 轮询作为兜底 |
+| FR-22 | 前端必须用颜色区分 TaskGraph 节点和边的状态 | pending ready running completed failed blocked skipped 需要具备稳定的视觉映射 |
+| FR-23 | 工作台主背景和任务图底色必须改为白底 | 移除幻彩背景, 保持纯白或近白底色, 保证信息密度提升后仍可读 |
 
 ## 8. 非功能需求
 
@@ -101,24 +111,28 @@
 - NFR-8: 后端返回的记忆数据必须经过脱敏和结构化整理
 - NFR-9: 记忆面板刷新频率需要可配置, 避免对 Redis 和后端造成不必要压力
 - NFR-10: 新增 memory 能力时文档, 契约, 测试和实现必须同步演进
+- NFR-11: SSE 连接断开时前端必须自动重连, 并在必要时降级到轮询兜底
+- NFR-12: 默认入口和主要操作路径必须保持高审美一致性, 不保留无用模块
+- NFR-13: TaskGraph 可视化在 100 个以内节点时必须保持流畅和可读
+- NFR-14: TaskGraph 的 REST 契约, SSE 契约和前端类型必须同步演进
 
 ## 9. 风险与取舍
 
 ### 主要风险
 
-- 当前前端架构文档以 SSE 和画布为中心, 与 MVP 轮询方案存在口径差异
+- 当前前端架构文档与实现需要重新对齐到 SSE 实时事件流方案
 - 当前后端还没有完整的前端 REST BFF, 前端无法立即接通真实链路
 - K8s 路线会引入 Ingress, 镜像仓库和环境变量管理复杂度
 - 如果直接暴露 Redis 原始结构, 页面会难以理解且存在信息泄露风险
-- 如果记忆刷新频率过高, 可能增加 Redis 和后端压力
+- 如果实时事件流没有做去重和节流, 可能增加后端与浏览器压力
 
 ### 设计取舍
 
 - 优先保留双应用边界, 不为了短期 demo 合并代码项目
-- 优先完成可演示闭环, 不抢先实现画布和实时流
+- 优先完成智能体状态, 记忆和 TaskGraph 的统一实时可观测性
 - 优先统一文档口径, 再推进编码和部署
 - 优先展示结构化记忆摘要, 不展示底层原始存储细节
-- 优先采用轮询版近实时方案, 后续再评估 SSE
+- 优先采用 SSE 实时推送, 轮询只保留为兜底
 
 ## 10. 发布准入标准
 
@@ -128,6 +142,9 @@
 - 页面可展示智能体状态列表和最终结果
 - 页面可在浅色主题下保持状态和结果可读性
 - 页面可展示后端受控提供的记忆视图和刷新状态
+- 页面可通过 SSE 实时更新智能体状态, 记忆视图和 TaskGraph 视图
+- 页面可在任务详情区域展示真实执行 DAG, 并支持节点与边的悬停数据查看
+- 页面主入口为工作台, 不再保留首页模块
 - 本地联调环境能通过 `/api/*` 正常访问后端
 - K8s 环境中前端与后端都能通过 Ingress 访问
 - README, PRD, ADR 和 Phase 文档对当前交付口径一致
@@ -137,7 +154,7 @@
 - 建立 FrontEnd 自有的需求总纲与阶段规划文档位
 - 明确双应用仓库与 K8s 闭环为当前默认实施路径
 - 约束 MVP 范围为 `表单提交 + 任务轮询 + 智能体状态 + 最终结果`
-- 规划浅色工作台和记忆可观测性的下一阶段需求边界
+- 规划浅色工作台, 记忆可观测性和 TaskGraph 实时 DAG 的需求边界
 
 ## 12. 相关文档
 

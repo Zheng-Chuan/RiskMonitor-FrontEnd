@@ -6,7 +6,7 @@
 
 ## 核心目标
 
-在不合并前后端代码项目的前提下, 让 RiskMonitor-FrontEnd 与 RiskMonitor-MultiAgent 跑通最小 demo 闭环, 并具备 K8s 部署基础.
+在不合并前后端代码项目的前提下, 让 RiskAgent-FrontEnd 与 RiskAgent-BackEnd 跑通最小 demo 闭环, 并具备 K8s 部署基础.
 
 ## 时间盒与优先级
 
@@ -17,7 +17,7 @@
 
 ### In Scope
 
-- 明确 FrontEnd 与 MultiAgent 保持双应用边界
+- 明确 FrontEnd 与 BackEnd 保持双应用边界
 - 为前端补齐需求总纲和阶段文档位
 - 定义前端最小页面范围和后端 REST BFF 依赖
 - 规划前端独立容器化和 K8s 部署路径

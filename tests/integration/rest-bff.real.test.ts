@@ -1,6 +1,6 @@
 // @vitest-environment node
 
-import { createTask, getAgents, getMemory, getTask, getTaskMemory } from '@/api/riskmonitor-api'
+import { createTask, getAgents, getMemory, getTask, getTaskMemory } from '@/api/riskagent-api'
 import type { MemorySnapshot, Task } from '@/types'
 
 const REQUIRED_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
@@ -60,7 +60,7 @@ describe('real REST BFF integration', () => {
     }
   })
 
-  it('fetches real agents snapshot from multiagent service', async () => {
+  it('fetches real agents snapshot from backend service', async () => {
     const snapshot = await getAgents()
 
     expect(snapshot.updatedAt).toBeGreaterThan(0)
@@ -68,7 +68,7 @@ describe('real REST BFF integration', () => {
     expect(snapshot.items.some((agent) => agent.id === 'system_engineer')).toBe(true)
   })
 
-  it('fetches real memory snapshot from multiagent service', async () => {
+  it('fetches real memory snapshot from backend service', async () => {
     const snapshot = await getMemory()
 
     expect(snapshot.updatedAt).toBeGreaterThan(0)

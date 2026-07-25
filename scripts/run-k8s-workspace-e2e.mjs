@@ -8,17 +8,17 @@ import { loadLocalEnvFiles } from './load-local-env.mjs'
 const __filename = fileURLToPath(import.meta.url)
 const frontendRoot = path.resolve(path.dirname(__filename), '..')
 const repoRoot = path.resolve(frontendRoot, '..')
-const backendRoot = path.resolve(repoRoot, 'RiskMonitor-MultiAgent')
+const backendRoot = path.resolve(repoRoot, 'RiskAgent-BackEnd')
 
-const namespace = process.env.RISKMONITOR_K8S_NAMESPACE ?? 'riskmonitor-e2e'
-const backendRelease = process.env.RISKMONITOR_K8S_BACKEND_RELEASE ?? 'riskmonitor'
-const frontendRelease = process.env.RISKMONITOR_K8S_FRONTEND_RELEASE ?? 'riskmonitor-frontend'
-const frontendPort = process.env.RISKMONITOR_K8S_FRONTEND_PORT_FORWARD ?? '4173'
-const frontendService = process.env.RISKMONITOR_K8S_FRONTEND_SERVICE ?? 'riskmonitor-frontend'
+const namespace = process.env.RISKAGENT_K8S_NAMESPACE ?? 'riskagent-e2e'
+const backendRelease = process.env.RISKAGENT_K8S_BACKEND_RELEASE ?? 'riskagent'
+const frontendRelease = process.env.RISKAGENT_K8S_FRONTEND_RELEASE ?? 'riskagent-frontend'
+const frontendPort = process.env.RISKAGENT_K8S_FRONTEND_PORT_FORWARD ?? '4173'
+const frontendService = process.env.RISKAGENT_K8S_FRONTEND_SERVICE ?? 'riskagent-frontend'
 const frontendBaseUrl = process.env.PLAYWRIGHT_FRONTEND_BASE_URL ?? `http://127.0.0.1:${frontendPort}`
-const imageTag = process.env.RISKMONITOR_K8S_IMAGE_TAG ?? `k8s-local-${Date.now()}`
-const backendImageRef = process.env.RISKMONITOR_K8S_BACKEND_IMAGE ?? `riskmonitor/multiagent:${imageTag}`
-const frontendImageRef = process.env.RISKMONITOR_K8S_FRONTEND_IMAGE ?? `riskmonitor/frontend:${imageTag}`
+const imageTag = process.env.RISKAGENT_K8S_IMAGE_TAG ?? `k8s-local-${Date.now()}`
+const backendImageRef = process.env.RISKAGENT_K8S_BACKEND_IMAGE ?? `riskagent/backend:${imageTag}`
+const frontendImageRef = process.env.RISKAGENT_K8S_FRONTEND_IMAGE ?? `riskagent/frontend:${imageTag}`
 
 loadLocalEnvFiles([
   path.join(frontendRoot, '.env.local'),
@@ -201,9 +201,9 @@ async function main() {
         'upgrade',
         '--install',
         frontendRelease,
-        'deploy/helm/riskmonitor-frontend',
+        'deploy/helm/riskagent-frontend',
         '-f',
-        'deploy/helm/riskmonitor-frontend/values-local-e2e.yaml',
+        'deploy/helm/riskagent-frontend/values-local-e2e.yaml',
         '--set',
         `image.repository=${frontendImage.repository}`,
         '--set',

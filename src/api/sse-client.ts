@@ -1,44 +1,107 @@
-// api/sse-client.ts
-
+import { API_ENDPOINTS } from './endpoints'
 import type {
-  AgentStatusMessage,
-  ArtifactMessage,
-  ErrorMessage,
-  SSEMessage,
-  TaskUpdateMessage,
-  TokenStreamMessage,
-} from '../types'
-import { MAX_RECONNECT } from '../utils/constants'
+  AgentSnapshotStreamEvent,
+  GraphSnapshotStreamEvent,
+  HeartbeatStreamEvent,
+  MemorySnapshotStreamEvent,
+  StreamErrorEvent,
+} from '@/types'
+import { MAX_RECONNECT, RECONNECT_BASE_DELAY, RECONNECT_MAX_DELAY } from '@/utils/constants'
 
-/** SSE 事件处理器 */
-export interface SSEHandlers {
-  onAgentStatus?: (message: AgentStatusMessage) => void
-  onTokenStream?: (message: TokenStreamMessage) => void
-  onTaskUpdate?: (message: TaskUpdateMessage) => void
-  onArtifact?: (message: ArtifactMessage) => void
-  onError?: (message: ErrorMessage) => void
+export interface WorkspaceStreamHandlers {
+  onOpen?: () => void
+  onAgentSnapshot?: (event: AgentSnapshotStreamEvent) => void
+  onMemorySnapshot?: (event: MemorySnapshotStreamEvent) => void
+  onGraphSnapshot?: (event: GraphSnapshotStreamEvent) => void
+  onHeartbeat?: (event: HeartbeatStreamEvent) => void
+  onErrorEvent?: (event: StreamErrorEvent) => void
+  onConnectionError?: () => void
 }
 
-/** SSE 客户端封装 */
-export class SSEClient {
+interface StreamConnectOptions {
+  taskId?: string | null
+}
+
+function buildStreamUrl(options?: StreamConnectOptions): string {
+  const url = new URL(
+    API_ENDPOINTS.stream,
+    import.meta.env.VITE_API_BASE_URL || window.location.origin,
+  )
+  if (options?.taskId) {
+    url.searchParams.set('task_id', options.taskId)
+  }
+  url.searchParams.set('agents', '1')
+  url.searchParams.set('memory', '1')
+  url.searchParams.set('graph', '1')
+  return url.toString()
+}
+
+export class WorkspaceStreamClient {
   private eventSource: EventSource | null = null
   private reconnectAttempts = 0
-  private readonly maxReconnect = MAX_RECONNECT
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null
+  private reconnectToken = 0
 
-  connect(url: string, handlers: SSEHandlers): void {
+  connect(handlers: WorkspaceStreamHandlers, options?: StreamConnectOptions): void {
     this.disconnect()
-    this.eventSource = new EventSource(url)
+    const reconnectToken = ++this.reconnectToken
+    const connectInternal = () => {
+      const url = buildStreamUrl(options)
+      this.eventSource = new EventSource(url)
 
-    this.eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data) as SSEMessage
-      this.dispatch(data, handlers)
+      this.eventSource.onopen = () => {
+        this.reconnectAttempts = 0
+        handlers.onOpen?.()
+      }
+
+      this.eventSource.addEventListener('agent_snapshot', (event) => {
+        handlers.onAgentSnapshot?.(JSON.parse((event as MessageEvent).data) as AgentSnapshotStreamEvent)
+      })
+
+      this.eventSource.addEventListener('memory_snapshot', (event) => {
+        handlers.onMemorySnapshot?.(JSON.parse((event as MessageEvent).data) as MemorySnapshotStreamEvent)
+      })
+
+      this.eventSource.addEventListener('graph_snapshot', (event) => {
+        handlers.onGraphSnapshot?.(JSON.parse((event as MessageEvent).data) as GraphSnapshotStreamEvent)
+      })
+
+      this.eventSource.addEventListener('heartbeat', (event) => {
+        handlers.onHeartbeat?.(JSON.parse((event as MessageEvent).data) as HeartbeatStreamEvent)
+      })
+
+      this.eventSource.addEventListener('error', (event) => {
+        try {
+          handlers.onErrorEvent?.(JSON.parse((event as MessageEvent).data) as StreamErrorEvent)
+        } catch {
+          handlers.onConnectionError?.()
+        }
+      })
+
+      this.eventSource.onerror = () => {
+        this.eventSource?.close()
+        this.eventSource = null
+        handlers.onConnectionError?.()
+
+        if (this.reconnectAttempts >= MAX_RECONNECT || reconnectToken !== this.reconnectToken) {
+          return
+        }
+
+        this.reconnectAttempts += 1
+        const delay = Math.min(RECONNECT_BASE_DELAY * 2 ** this.reconnectAttempts, RECONNECT_MAX_DELAY)
+        this.reconnectTimer = setTimeout(() => {
+          if (reconnectToken === this.reconnectToken) {
+            connectInternal()
+          }
+        }, delay)
+      }
     }
 
-    this.eventSource.onerror = () => this.reconnect(url, handlers)
+    connectInternal()
   }
 
   disconnect(): void {
+    this.reconnectToken += 1
     if (this.reconnectTimer) {
       clearTimeout(this.reconnectTimer)
       this.reconnectTimer = null
@@ -47,42 +110,6 @@ export class SSEClient {
     this.eventSource = null
     this.reconnectAttempts = 0
   }
-
-  private dispatch(message: SSEMessage, handlers: SSEHandlers): void {
-    switch (message.type) {
-      case 'agent_status':
-        handlers.onAgentStatus?.(message as AgentStatusMessage)
-        break
-      case 'token_stream':
-        handlers.onTokenStream?.(message as TokenStreamMessage)
-        break
-      case 'task_update':
-        handlers.onTaskUpdate?.(message as TaskUpdateMessage)
-        break
-      case 'artifact':
-        handlers.onArtifact?.(message as ArtifactMessage)
-        break
-      case 'error':
-        handlers.onError?.(message as ErrorMessage)
-        break
-    }
-  }
-
-  private reconnect(url: string, handlers: SSEHandlers): void {
-    this.eventSource?.close()
-    this.eventSource = null
-
-    if (this.reconnectAttempts >= this.maxReconnect) {
-      return
-    }
-
-    this.reconnectAttempts++
-    const delay = Math.min(1000 * 2 ** this.reconnectAttempts, 30000)
-    this.reconnectTimer = setTimeout(() => {
-      this.connect(url, handlers)
-    }, delay)
-  }
 }
 
-/** 默认 SSE 客户端实例 */
-export const sseClient = new SSEClient()
+export const workspaceStreamClient = new WorkspaceStreamClient()

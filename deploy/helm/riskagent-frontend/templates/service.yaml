@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "riskmonitor-frontend.fullname" . }}
+  name: {{ include "riskagent-frontend.fullname" . }}
   labels:
-    {{- include "riskmonitor-frontend.labels" . | nindent 4 }}
+    {{- include "riskagent-frontend.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   selector:
-    {{- include "riskmonitor-frontend.selectorLabels" . | nindent 4 }}
+    {{- include "riskagent-frontend.selectorLabels" . | nindent 4 }}
   ports:
     - name: http
       port: {{ .Values.service.port }}

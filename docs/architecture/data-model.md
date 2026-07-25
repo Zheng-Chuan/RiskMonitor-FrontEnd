@@ -1,6 +1,6 @@
 # 数据模型
 
-> RiskMonitor-FrontEnd 核心数据类型定义文档。本文定义了项目中所有关键实体、枚举和 Store 状态结构。
+> RiskAgent-FrontEnd 核心数据类型定义文档。本文定义了项目中所有关键实体、枚举和 Store 状态结构。
 
 ## 核心类型总览
 

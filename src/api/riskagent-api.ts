@@ -9,12 +9,17 @@ import type {
   MemoryItem,
   MemorySnapshot,
   Task,
+  TaskGraphEdge,
+  TaskGraphNode,
+  TaskGraphSnapshot,
+  TaskGraphStatus,
   TaskStatus,
   TaskStep,
 } from '@/types'
 
 type BackendTaskStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled'
 type BackendAgentStatus = AgentStatus | 'working'
+type BackendTaskGraphStatus = TaskGraphStatus
 
 interface CreateTaskResponse {
   task_id: string
@@ -45,6 +50,58 @@ interface BackendTaskError {
   message: string
 }
 
+interface BackendTaskGraphNode {
+  id: string
+  label: string
+  kind: string
+  status: BackendTaskGraphStatus
+  parentId?: string
+  parent_id?: string
+  targetAgent?: string
+  target_agent?: string
+  toolName?: string
+  tool_name?: string
+  reason?: string
+  instruction?: string
+  condition?: string
+  startedAt?: number
+  started_at?: number
+  finishedAt?: number
+  finished_at?: number
+  durationMs?: number
+  duration_ms?: number
+  data?: Record<string, unknown>
+}
+
+interface BackendTaskGraphEdge {
+  id: string
+  source: string
+  target: string
+  status: BackendTaskGraphStatus
+  condition?: string
+  data?: Record<string, unknown>
+}
+
+interface BackendTaskGraphSummary {
+  nodeCount: number
+  edgeCount: number
+  completedCount: number
+  runningCount: number
+  failedCount: number
+  blockedCount: number
+}
+
+interface BackendTaskGraphSnapshot {
+  task_id?: string
+  session_id?: string
+  status: string
+  schema_version?: string
+  nodes: BackendTaskGraphNode[]
+  edges: BackendTaskGraphEdge[]
+  summary?: BackendTaskGraphSummary
+  updated_at?: number
+}
+
 interface BackendTaskDetail {
   id: string
   title?: string
@@ -53,6 +110,7 @@ interface BackendTaskDetail {
   steps?: BackendTaskStep[]
   result?: BackendTaskResult | null
   error?: BackendTaskError | null
+  graph?: BackendTaskGraphSnapshot | null
   created_at: number
   updated_at: number
 }
@@ -176,7 +234,7 @@ function mapTaskSteps(task: BackendTaskDetail): TaskStep[] {
 
 function mapArtifacts(task: BackendTaskDetail): Artifact[] {
   return (task.result?.artifacts ?? []).map((artifact, index) => ({
-    id: artifact.id ?? `${task.id}-artifact-${index + 1}`,
+    id: artifact.id ?? task.id + '-artifact-' + String(index + 1),
     taskId: task.id,
     type: artifact.type ?? 'document',
     title: artifact.title,
@@ -189,6 +247,69 @@ function mapArtifacts(task: BackendTaskDetail): Artifact[] {
 
 function buildTaskTitle(task: BackendTaskDetail): string {
   return task.title ?? (task.description.slice(0, 48) || '未命名任务')
+}
+
+function normalizeGraphStatus(status: string | undefined): TaskGraphStatus {
+  switch (status) {
+    case 'ready':
+      return 'ready'
+    case 'running':
+      return 'running'
+    case 'completed':
+      return 'completed'
+    case 'failed':
+      return 'failed'
+    case 'blocked':
+      return 'blocked'
+    case 'skipped':
+      return 'skipped'
+    case 'pending':
+    default:
+      return 'pending'
+  }
+}
+
+function mapGraphNode(node: BackendTaskGraphNode): TaskGraphNode {
+  return {
+    id: node.id,
+    label: node.label,
+    kind: node.kind,
+    status: normalizeGraphStatus(node.status),
+    parentId: node.parentId ?? node.parent_id,
+    targetAgent: node.targetAgent ?? node.target_agent,
+    toolName: node.toolName ?? node.tool_name,
+    reason: node.reason,
+    instruction: node.instruction,
+    condition: node.condition,
+    startedAt: node.startedAt ?? node.started_at,
+    finishedAt: node.finishedAt ?? node.finished_at,
+    durationMs: node.durationMs ?? node.duration_ms,
+    data: node.data ?? {},
+  }
+}
+
+function mapGraphEdge(edge: BackendTaskGraphEdge): TaskGraphEdge {
+  return {
+    id: edge.id,
+    source: edge.source,
+    target: edge.target,
+    status: normalizeGraphStatus(edge.status),
+    condition: edge.condition,
+    data: edge.data ?? {},
+  }
+}
+
+export function mapTaskGraphSnapshot(snapshot: BackendTaskGraphSnapshot): TaskGraphSnapshot {
+  return {
+    taskId: snapshot.task_id ?? '',
+    sessionId: snapshot.session_id ?? undefined,
+    status: snapshot.status,
+    schemaVersion: snapshot.schema_version ?? 'task_graph.v1',
+    nodes: (snapshot.nodes ?? []).map(mapGraphNode),
+    edges: (snapshot.edges ?? []).map(mapGraphEdge),
+    summary: snapshot.summary,
+    updatedAt: snapshot.updated_at ?? Date.now(),
+  }
 }
 
 export function createDraftTask(taskId: string, description: string, createdAt: number): Task {
@@ -226,6 +347,7 @@ export function mapTaskDetail(task: BackendTaskDetail): Task {
     errorMessage: task.error?.message,
     resultSummary: task.result?.summary,
     steps: mapTaskSteps(task),
+    graph: task.graph ? mapTaskGraphSnapshot(task.graph) : undefined,
   }
 }
 
@@ -251,6 +373,11 @@ export async function getTask(taskId: string): Promise<Task> {
   return mapTaskDetail(response)
 }
 
+export async function getTaskGraph(taskId: string): Promise<TaskGraphSnapshot> {
+  const response = await httpClient.get<BackendTaskGraphSnapshot>(API_ENDPOINTS.getTaskGraph(taskId))
+  return mapTaskGraphSnapshot(response)
+}
+
 export async function getAgents(): Promise<AgentsSnapshot> {
   const response = await httpClient.get<BackendAgentList>(API_ENDPOINTS.getAgents)
   const updatedAt = response.updated_at ?? Date.now()
@@ -262,11 +389,11 @@ export async function getAgents(): Promise<AgentsSnapshot> {
 }
 
 export async function getMemory(limit = 20): Promise<MemorySnapshot> {
-  const response = await httpClient.get<BackendMemorySnapshot>(`${API_ENDPOINTS.getMemory}?limit=${limit}`)
+  const response = await httpClient.get<BackendMemorySnapshot>(API_ENDPOINTS.getMemory + '?limit=' + String(limit))
   return mapMemorySnapshot(response)
 }
 
 export async function getTaskMemory(taskId: string, limit = 30): Promise<MemorySnapshot> {
-  const response = await httpClient.get<BackendMemorySnapshot>(`${API_ENDPOINTS.getTaskMemory(taskId)}?limit=${limit}`)
+  const response = await httpClient.get<BackendMemorySnapshot>(API_ENDPOINTS.getTaskMemory(taskId) + '?limit=' + String(limit))
   return mapMemorySnapshot(response)
 }

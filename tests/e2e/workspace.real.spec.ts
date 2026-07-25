@@ -1,9 +1,10 @@
 import { expect, test, type Page } from '@playwright/test'
 
 async function submitRealTask(page: Page, taskDescription: string) {
-  await page.goto('/workspace')
+  await page.goto('/')
   await expect(page.getByTestId('agent-list')).toBeVisible()
   await expect(page.getByTestId('task-description-input')).toBeVisible()
+  await expect(page.getByTestId('realtime-status')).toBeVisible()
   await page.getByTestId('task-description-input').fill(taskDescription)
   await page.getByTestId('submit-task-button').click()
   await expect(page.getByTestId('task-list')).toBeVisible()
@@ -25,9 +26,10 @@ async function expectMemoryPanelSettled(page: Page) {
 
 test.describe('workspace real page integration', () => {
   test('shows validation error when submitting an empty task', async ({ page }) => {
-    await page.goto('/workspace')
+    await page.goto('/')
 
     await expect(page.getByTestId('task-description-input')).toBeVisible()
+    await expect(page.getByTestId('realtime-status')).toBeVisible()
     await page.getByTestId('task-description-input').fill('   ')
     await page.getByTestId('submit-task-button').click()
 
@@ -49,13 +51,17 @@ test.describe('workspace real page integration', () => {
   })
 
   test('loads real memory panel snapshot and supports manual refresh', async ({ page }) => {
-    await page.goto('/workspace')
+    await page.goto('/')
 
     await page.waitForResponse((response) => response.url().includes('/api/memory') && response.ok())
+    await expect(page.getByRole('button', { name: '刷新智能体' })).toBeVisible()
+    await expect(page.getByTestId('realtime-status')).toBeVisible()
     await expect(page.getByTestId('memory-shared-count')).toBeVisible()
     await expect(page.getByTestId('memory-private-count')).toBeVisible()
     await expect(page.getByTestId('memory-agent-count')).toBeVisible()
     await expect(page.getByTestId('memory-last-sync')).not.toHaveText('最近刷新 --:--:--')
+    await expect(page.getByTestId('memory-section-shared')).toBeVisible()
+    await expect(page.getByTestId('memory-section-private')).toBeVisible()
     await expectMemoryPanelSettled(page)
 
     const refreshResponse = page.waitForResponse((response) => response.url().includes('/api/memory') && response.ok())
@@ -63,6 +69,11 @@ test.describe('workspace real page integration', () => {
     await refreshResponse
     await expect(page.getByTestId('memory-last-sync')).not.toHaveText('最近刷新 --:--:--')
     await expectMemoryPanelSettled(page)
+
+    await page.getByTestId('memory-panel-toggle').click()
+    await expect(page.getByTestId('memory-panel-collapsed')).toBeVisible()
+    await page.getByTestId('memory-panel-toggle').click()
+    await expect(page.getByTestId('memory-section-shared')).toBeVisible()
   })
 
   test('observes real task status progression during polling', async ({ page }) => {

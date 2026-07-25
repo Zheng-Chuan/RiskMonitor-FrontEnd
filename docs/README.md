@@ -1,6 +1,6 @@
 # 文档导航
 
-> RiskMonitor-FrontEnd 项目文档体系总览。本目录是所有项目文档的入口。
+> RiskAgent-FrontEnd 项目文档体系总览。本目录是所有项目文档的入口。
 
 ## 文档体系总览
 
@@ -21,13 +21,13 @@ docs/
 │   ├── development.md                 # 开发流程指南
 │   └── deployment.md                  # 部署指南
 ├── testing/                           # 测试与联调说明
-│   └── rest-bff-integration.md        # FrontEnd 到 MultiAgent 的真实 REST 联调测试
+│   └── rest-bff-integration.md        # FrontEnd 到 BackEnd 的真实 REST 联调测试
 ├── standards/                         # 开发规范
 │   ├── coding-conventions.md          # 编码规范
 │   └── testing.md                     # 测试规范
 └── decisions/                         # 架构决策记录（ADR）
     ├── 0001-tech-stack-selection.md   # 技术栈选型决策
-    ├── 0002-multiagent-frontend-architecture.md  # MultiAgent 前端架构决策
+    ├── 0002-backend-frontend-architecture.md  # BackEnd 前端架构决策
     ├── 0003-volcengine-deployment.md  # ADR: 火山引擎部署决策
     └── 0004-dual-app-repo-and-k8s-deployment.md  # ADR: 双应用仓库与 K8s 部署决策
 ```
@@ -63,7 +63,7 @@ docs/
 
 | 文档 | 路径 | 说明 |
 |------|------|------|
-| REST BFF 联调测试 | [testing/rest-bff-integration.md](testing/rest-bff-integration.md) | FrontEnd 通过本地 K8s 生产等价链路联调 MultiAgent REST BFF 的执行方式和验收标准 |
+| REST BFF 联调测试 | [testing/rest-bff-integration.md](testing/rest-bff-integration.md) | FrontEnd 通过本地 K8s 生产等价链路联调 BackEnd REST BFF 的执行方式和验收标准 |
 
 ### 开发规范
 
@@ -77,9 +77,9 @@ docs/
 | 文档 | 路径 | 说明 |
 |------|------|------|
 | 技术栈选型 | [decisions/0001-tech-stack-selection.md](decisions/0001-tech-stack-selection.md) | React 19 + Vite 8 + TS 6 + Zustand + React Flow + SSE 的选型理由 |
-| MultiAgent 架构 | [decisions/0002-multiagent-frontend-architecture.md](decisions/0002-multiagent-frontend-architecture.md) | Zustand + React Flow + SSE + XState 的架构决策理由 |
+| BackEnd 架构 | [decisions/0002-backend-frontend-architecture.md](decisions/0002-backend-frontend-architecture.md) | Zustand + React Flow + SSE + XState 的架构决策理由 |
 | 火山引擎部署 | [decisions/0003-volcengine-deployment.md](decisions/0003-volcengine-deployment.md) | 早期单机 ECS MVP 路线的历史决策 |
-| 双应用仓库与 K8s 部署 | [decisions/0004-dual-app-repo-and-k8s-deployment.md](decisions/0004-dual-app-repo-and-k8s-deployment.md) | 当前默认实施路径, 即 FrontEnd 与 MultiAgent 保持双应用边界并统一在 K8s 闭环交付 |
+| 双应用仓库与 K8s 部署 | [decisions/0004-dual-app-repo-and-k8s-deployment.md](decisions/0004-dual-app-repo-and-k8s-deployment.md) | 当前默认实施路径, 即 FrontEnd 与 BackEnd 保持双应用边界并统一在 K8s 闭环交付 |
 
 ### 根目录文档
 
