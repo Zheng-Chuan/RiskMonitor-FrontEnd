@@ -16,13 +16,13 @@
   border-radius: 999px;
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
-  background: rgba(15, 23, 42, 0.32);
+  background: rgba(248, 250, 252, 0.94);
 }
 
 .tabActive {
-  border-color: rgba(129, 140, 248, 0.32);
-  color: #eef2ff;
-  background: rgba(99, 102, 241, 0.18);
+  border-color: rgba(14, 165, 233, 0.24);
+  color: #075985;
+  background: rgba(224, 242, 254, 0.94);
 }
 
 .timeline {
@@ -72,5 +72,5 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-sm);
-  color: #f8fafc;
+  color: var(--color-text-heading);
 }

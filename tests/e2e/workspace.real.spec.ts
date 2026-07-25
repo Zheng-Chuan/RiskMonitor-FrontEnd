@@ -12,6 +12,17 @@ async function submitRealTask(page: Page, taskDescription: string) {
   await expect(page.getByTestId('active-task-id')).not.toHaveText('')
 }
 
+async function expectMemoryPanelSettled(page: Page) {
+  const memoryPanel = page.getByTestId('memory-panel')
+  const memoryEmpty = page.getByTestId('memory-panel-empty')
+
+  await expect(async () => {
+    const hasPanel = await memoryPanel.isVisible().catch(() => false)
+    const hasEmpty = await memoryEmpty.isVisible().catch(() => false)
+    expect(hasPanel || hasEmpty).toBe(true)
+  }).toPass({ timeout: 15_000, intervals: [500, 1_000, 2_000] })
+}
+
 test.describe('workspace real page integration', () => {
   test('shows validation error when submitting an empty task', async ({ page }) => {
     await page.goto('/workspace')
@@ -33,6 +44,25 @@ test.describe('workspace real page integration', () => {
     await expect(page.getByTestId('agent-item-system_engineer')).toBeVisible()
     await expect(page.getByTestId('agent-item-risk_analyst')).toBeVisible()
     await expect(page.getByTestId('metric-task-count')).not.toHaveText('0')
+    await expect(page.getByTestId('memory-last-sync')).not.toHaveText('最近刷新 --:--:--')
+    await expectMemoryPanelSettled(page)
+  })
+
+  test('loads real memory panel snapshot and supports manual refresh', async ({ page }) => {
+    await page.goto('/workspace')
+
+    await page.waitForResponse((response) => response.url().includes('/api/memory') && response.ok())
+    await expect(page.getByTestId('memory-shared-count')).toBeVisible()
+    await expect(page.getByTestId('memory-private-count')).toBeVisible()
+    await expect(page.getByTestId('memory-agent-count')).toBeVisible()
+    await expect(page.getByTestId('memory-last-sync')).not.toHaveText('最近刷新 --:--:--')
+    await expectMemoryPanelSettled(page)
+
+    const refreshResponse = page.waitForResponse((response) => response.url().includes('/api/memory') && response.ok())
+    await page.getByTestId('memory-refresh-button').click()
+    await refreshResponse
+    await expect(page.getByTestId('memory-last-sync')).not.toHaveText('最近刷新 --:--:--')
+    await expectMemoryPanelSettled(page)
   })
 
   test('observes real task status progression during polling', async ({ page }) => {
@@ -70,5 +100,20 @@ test.describe('workspace real page integration', () => {
       expect(hasSummary || hasPlaceholder || hasError).toBe(true)
       expect(hasArtifactList || hasArtifactPlaceholder).toBe(true)
     }).toPass({ timeout: 20_000, intervals: [500, 1_000, 2_000] })
+  })
+
+  test('requests task scoped memory after submitting a real task', async ({ page }) => {
+    const taskDescription = `记忆面板真实联调测试 ${Date.now()}`
+
+    await submitRealTask(page, taskDescription)
+    await page.waitForResponse((response) => /\/api\/tasks\/.+\/memory/.test(response.url()) && response.ok())
+
+    await expect(page.getByTestId('memory-last-sync')).not.toHaveText('最近刷新 --:--:--')
+    await expectMemoryPanelSettled(page)
+
+    const memoryPanel = page.getByTestId('memory-panel')
+    if (await memoryPanel.isVisible().catch(() => false)) {
+      await expect(page.locator('[data-testid^="memory-summary-"]').first()).not.toHaveText('')
+    }
   })
 })

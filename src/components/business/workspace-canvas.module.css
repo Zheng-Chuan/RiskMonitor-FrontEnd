@@ -10,24 +10,24 @@
 .canvasFrame {
   height: 560px;
   overflow: hidden;
-  border: 1px solid rgba(129, 140, 248, 0.14);
+  border: 1px solid rgba(14, 165, 233, 0.14);
   border-radius: var(--radius-xl);
   background:
-    radial-gradient(circle at top left, rgba(99, 102, 241, 0.18), transparent 28%),
-    rgba(15, 23, 42, 0.58);
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 28%),
+    rgba(239, 246, 255, 0.92);
 }
 
 .nodeCard {
   width: 220px;
   padding: 16px;
-  border: 1px solid rgba(129, 140, 248, 0.24);
+  border: 1px solid rgba(14, 165, 233, 0.24);
   border-radius: 20px;
   background:
-    linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.82)),
-    rgba(15, 23, 42, 0.9);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(241, 245, 249, 0.96)),
+    rgba(248, 250, 252, 0.96);
   box-shadow:
-    0 10px 30px rgba(2, 6, 23, 0.26),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    0 10px 30px rgba(148, 163, 184, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .nodeHeader {
@@ -48,7 +48,7 @@
 .nodeTitle {
   display: block;
   margin-top: 6px;
-  color: #f8fafc;
+  color: var(--color-text-heading);
   font-size: var(--font-size-base);
 }
 
@@ -59,11 +59,11 @@
 }
 
 .miniMap {
-  background: rgba(15, 23, 42, 0.92);
+  background: rgba(255, 255, 255, 0.96);
 }
 
 .controls {
-  background: rgba(15, 23, 42, 0.92);
+  background: rgba(255, 255, 255, 0.96);
   border-radius: 14px;
 }
 

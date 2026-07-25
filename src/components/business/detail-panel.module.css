@@ -18,7 +18,7 @@
 }
 
 .primaryText {
-  color: #f8fafc;
+  color: var(--color-text-heading);
   font-weight: 600;
 }
 
@@ -34,11 +34,11 @@
 
 .metricChip {
   padding: 8px 12px;
-  border: 1px solid rgba(129, 140, 248, 0.18);
+  border: 1px solid rgba(14, 165, 233, 0.18);
   border-radius: 999px;
-  color: #dbeafe;
+  color: #0369a1;
   font-size: var(--font-size-sm);
-  background: rgba(30, 41, 59, 0.75);
+  background: rgba(224, 242, 254, 0.94);
 }
 
 .artifactList {
@@ -53,7 +53,7 @@
   padding: var(--spacing-md);
   border: 1px solid rgba(148, 163, 184, 0.14);
   border-radius: var(--radius-lg);
-  background: rgba(15, 23, 42, 0.42);
+  background: rgba(248, 250, 252, 0.94);
 }
 
 .artifactHeader {

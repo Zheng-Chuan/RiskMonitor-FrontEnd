@@ -88,6 +88,7 @@ export function WorkspacePage() {
           </button>
           <button
             type="button"
+            data-testid="memory-refresh-button"
             className={styles.actionButtonSecondary}
             onClick={() => {
               void refreshMemory(activeTask?.id ?? null)
